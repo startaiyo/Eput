@@ -42,19 +42,36 @@ struct TextArea: UIViewRepresentable {
     }
 }
 struct ContentView: View {
-    @State var text = "ホゲホゲホゲホゲほげ"
+    @State var text = "アイウエオアイウエオアイウエオアイウエオ愛うおエアいうオエアイウエオ"
     var body: some View {
         VStack(spacing:50){
             Button(action: {
-                let utterance = AVSpeechUtterance(string:self.text)
-                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-                utterance.rate = 0.5
-                let synthesizer = AVSpeechSynthesizer()
-                synthesizer.speak(utterance)
+                do {
+                        try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord, mode: .default, options: .defaultToSpeaker)
+                        try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+                    } catch {
+                        print("audioSession properties weren't set because of an error.")
+                    }
+
+                let utterance = AVSpeechUtterance(string: self.text)
+                    utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+
+                    let synth = AVSpeechSynthesizer()
+                    synth.speak(utterance)
+
+//                    defer {
+//                        disableAVSession()
+//                    }
             }){
                 Text("start tts")
             }
-            
+//            func disableAVSession() {
+//                do {
+//                    try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+//                } catch {
+//                    print("audioSession properties weren't disable.")
+//                }
+//            }
             TextArea(
                 text: $text
             ).frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
