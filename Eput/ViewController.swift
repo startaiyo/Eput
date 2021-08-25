@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     func initView(){
         label.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
         label.center = self.view.center
-        label.text = "ホゲホゲホゲホゲホゲホゲ"
+        label.text = "ホゲホゲホゲホゲホゲホゲピヨピヨピヨピヨピヨ"
         self.view.addSubview(label)
 
         button.frame = CGRect(x: 0, y: 0, width: 300, height: 30)
@@ -36,6 +36,9 @@ class ViewController: UIViewController {
         let voice = AVSpeechSynthesisVoice(language: "ja-JP")
         utterance.voice = voice
         speechSynthesizer.speak(utterance)
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
     }
 }
 
