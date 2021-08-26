@@ -8,6 +8,13 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let url: URL = URL(string: "http://qiita.com/api/v2/items")!
+        let task: URLSessionTask = URLSession.shared.dataTask(with: url, completionHandler: {data, response, error in
+            print("data: \(String(describing: data))")
+            print("response: \(String(describing: response))")
+            print("error: \(String(describing: error))")
+        })
+        task.resume() //実行する
         initView()
     }
 
