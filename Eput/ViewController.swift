@@ -5,9 +5,29 @@ import RealmSwift
 class InputList: Object{
     @objc dynamic var content : String = ""
 }
+class NewInputViewController: UIViewController{
+    @IBOutlet weak var txtContent: UITextField!
+    private let realm = try! Realm()
+    public var completionHandler: (() -> Void)?
+    override func viewDidLoad() {
+        super .viewDidLoad()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(btnSave))
+    }
+    @objc func btnSave(_ sender: Any){
+        let inputContent = txtContent.text
+        realm.beginWrite()
+        let newInput = InputList()
+        newInput.content = inputContent!
+        realm.add(newInput)
+        try! realm.commitWrite()
+        completionHandler?()
+        navigationController?.popToRootViewController(animated: true)
+    }
+}
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var inputbutton: UIButton!
     private let realm = try! Realm()
     private var input = [InputList]()
     let label = UILabel()
@@ -26,13 +46,30 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let hoge = "ホゲホゲホゲホゲホゲホゲピヨピヨピヨピヨピヨ"
         initView(i: hoge)
     }
+    @IBOutlet weak var moveInput: UIButton!
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{return input.count}
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "input",for: indexPath)
         cell.textLabel?.text = input[indexPath.row].content
         return cell
     }
-    @IBAction func btnAdd(_ sender: Any){}
+    @IBAction func btnAdd(_ sender: Any){
+        guard let vc = storyboard?.instantiateViewController(identifier: "NewInput")
+                as? NewInputViewController else{
+            return
+        }
+        vc.completionHandler = {
+            [weak self] in
+            self?.refresh()
+        }
+        vc.title = "New Input"
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    func refresh(){
+        input = realm.objects(InputList.self).map({$0})
+        tableView.reloadData()
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
