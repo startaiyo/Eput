@@ -15,6 +15,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         let url: URL = URL(string: "https://fw79fhpu20.execute-api.ap-northeast-1.amazonaws.com/default/cssappfunc/cssdetail/1")!
         let task: URLSessionTask = URLSession.shared.dataTask(with: url, completionHandler: {data, response, error in
             print("data: \(String(describing: data))")
@@ -22,6 +23,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             print("error: \(String(describing: error))")
         })
         task.resume() //実行する
+
         input = realm.objects(InputList.self).map({$0})
         let hoge = "ホゲホゲホゲホゲホゲホゲピヨピヨピヨピヨピヨ"
         initView(i: hoge)
