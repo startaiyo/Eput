@@ -6,13 +6,19 @@ class InputList: Object{
     @objc dynamic var content : String = ""
 }
 class NewInputViewController: UIViewController{
+    @IBOutlet weak var backbutton: UIButton!
     @IBOutlet weak var txtContent: UITextField!
     private let realm = try! Realm()
     public var completionHandler: (() -> Void)?
     override func viewDidLoad() {
         super .viewDidLoad()
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(btnSave))
+        backbutton.frame = CGRect(x: 0, y: 100, width: 300, height: 30)
+        backbutton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     }
+    @objc func didTapButton() {
+        self.dismiss(animated: true, completion: nil)
+        }
     @objc func btnSave(_ sender: Any){
         let inputContent = txtContent.text
         realm.beginWrite()
@@ -90,8 +96,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         button.setTitle("テキスト読み上げ", for: .normal)
         button.addTarget(self, action: #selector(ViewController.speech), for: .touchUpInside)
         self.view.addSubview(button)
+        inputbutton.frame = CGRect(x: 0, y: 100, width: 300, height: 30)
+        inputbutton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
     }
+    @objc func didTapButton() {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "NewInput") as! NewInputViewController
+        self.present(vc, animated: true, completion: nil)
 
+        }
     @objc func speech(){
         let speechSynthesizer = AVSpeechSynthesizer()
         let utterance = AVSpeechUtterance(string: self.label.text!)
