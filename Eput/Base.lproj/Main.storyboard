@@ -60,12 +60,19 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="戻ります"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PH8-4F-Uf2">
+                                <rect key="frame" x="189" y="196" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="send"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="UDY-1T-qvQ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
                         <outlet property="backbutton" destination="9g5-2b-H6M" id="OCH-t2-scm"/>
+                        <outlet property="sendbutton" destination="PH8-4F-Uf2" id="2CC-IX-i3h"/>
+                        <outlet property="txtContent" destination="0dA-to-Sza" id="xsS-kQ-U2V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pzX-s2-Xyj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
