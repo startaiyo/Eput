@@ -24,17 +24,18 @@ class NewInputViewController: UIViewController{
         }
     @objc func btnSave(_ sender: Any){
         let inputContent = txtContent.text
-        realm.beginWrite()
         let newInput = InputList()
         newInput.content = inputContent!
-        realm.add(newInput)
-        try! realm.commitWrite()
-        completionHandler?()
-        navigationController?.popToRootViewController(animated: true)
-        print(newInput)
+        do{
+            try realm.write({ () -> Void in
+                            realm.add(newInput)
+                            print("ToDo Saved")
+            })
+        }catch{
+            print("Saving Is Failed")
+        }
     }
 }
-
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var inputbutton: UIButton!
@@ -55,16 +56,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         task.resume() //実行する
 
         input = realm.objects(InputList.self).map({$0})
-        let hoge = "ホゲホゲホゲホゲホゲホゲピヨピヨピヨピヨピヨ"
+        print(input)
+        let hoge = "ほげホゲホゲホゲホゲホゲホゲピヨピヨピヨピヨピヨ"
         initView(i: hoge)
     }
     @IBOutlet weak var moveInput: UIButton!
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{return input.count}
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        let cell = tableView.dequeueReusableCell(withIdentifier: "input",for: indexPath)
-        cell.textLabel?.text = input[indexPath.row].content
-        return cell
-    }
     @IBAction func btnAdd(_ sender: Any){
         guard let vc = storyboard?.instantiateViewController(identifier: "NewInput")
                 as? NewInputViewController else{
@@ -86,7 +82,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{return input.count}
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        let cell = tableView.dequeueReusableCell(withIdentifier: "input",for: indexPath)
+        cell.textLabel?.text = input[indexPath.row].content
+        return cell
+    }
     func initView(i: String){
         label.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
         label.center = self.view.center
