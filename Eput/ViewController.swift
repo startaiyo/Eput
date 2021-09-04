@@ -6,12 +6,15 @@ class InputList: Object{
     @objc dynamic var content : String = ""
 }
 class NewInputViewController: UIViewController{
-    @IBOutlet weak var backbutton: UIButton!
     @IBOutlet weak var txtContent: UITextField!
+    @IBOutlet weak var sendbutton: UIButton!
+    @IBOutlet weak var backbutton: UIButton!
     private let realm = try! Realm()
     public var completionHandler: (() -> Void)?
     override func viewDidLoad() {
         super .viewDidLoad()
+        sendbutton.frame = CGRect(x: 0, y: 200, width: 300, height: 30)
+        sendbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(btnSave))
         backbutton.frame = CGRect(x: 0, y: 100, width: 300, height: 30)
         backbutton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
@@ -28,6 +31,7 @@ class NewInputViewController: UIViewController{
         try! realm.commitWrite()
         completionHandler?()
         navigationController?.popToRootViewController(animated: true)
+        print(newInput)
     }
 }
 
