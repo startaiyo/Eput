@@ -46,12 +46,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var il = [""]
     let label = UILabel()
     let button = UIButton()
-
+    let cellIdentifier = "InputTableViewCell"
     override func viewDidLoad() {
         super.viewDidLoad()
         input = realm.objects(InputList.self).map({$0})
-        self.tableView.delegate=self
-        self.tableView.dataSource=self
+//        self.tableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
+//        self.tableView.delegate=self
+//        self.tableView.dataSource=self
         self.inputList = realm.objects(InputList.self)
         for i in inputList{
             il.append(i.content)
@@ -126,9 +127,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return self.inputList.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "inputCell",for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier,for: indexPath) as! InputTableViewCell
         let tmpCell: InputList = self.inputList[(indexPath as NSIndexPath).row];
-        cell.textLabel?.text = tmpCell.content
+        cell.inputLabel.text = tmpCell.content
         return cell
     }
     
@@ -151,4 +152,32 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         speechSynthesizer.speak(utterance)
     }
 }
+class CheckBox: UIButton {
+    // Images
+    let checkedImage = UIImage(named: "check_on")! as UIImage
+    let uncheckedImage = UIImage(named: "check_off")! as UIImage
 
+    // Bool property
+    var isChecked: Bool = false {
+        didSet{
+            if isChecked == true {
+                self.setImage(checkedImage, for: UIControl.State.normal)
+            } else {
+                self.setImage(uncheckedImage, for: UIControl.State.normal)
+            }
+        }
+    }
+
+    override func awakeFromNib() {
+        self.addTarget(self, action:#selector(buttonClicked(sender:)), for: UIControl.Event.touchUpInside)
+        self.isChecked = false
+    }
+
+
+
+    @objc func buttonClicked(sender: UIButton) {
+        if sender == self {
+            isChecked = !isChecked
+        }
+    }
+}
