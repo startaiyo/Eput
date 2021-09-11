@@ -2,14 +2,15 @@
 //  InputTableViewCell.swift
 //  Eput
 //
-//  Created by 土井星太朗 on 2021/09/08.
+//  Created by 土井星太朗 on 2021/09/11.
 //
 
 import UIKit
 
 class InputTableViewCell: UITableViewCell {
-    @IBOutlet weak var checkBtn: UIButton!
     @IBOutlet weak var inputLabel: UILabel!
+    @IBOutlet weak var checkBtn: CheckBox!
+    @IBOutlet weak var boolLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -21,5 +22,5 @@ class InputTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
+    
 }

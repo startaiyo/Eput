@@ -3,7 +3,13 @@ import AVFoundation
 import RealmSwift
 
 class InputList: Object{
+    @objc dynamic var id : String = UUID().uuidString
+    @objc dynamic var createdAt = Date()
     @objc dynamic var content : String = ""
+    @objc dynamic var isChecked : Bool = false
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }
 //class NewInputViewController: UIViewController{
 //    @IBOutlet weak var txtContent: UITextField!
@@ -38,9 +44,9 @@ class InputList: Object{
 //}
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var inputField: UITextField!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var InputTableView: UITableView!
     @IBOutlet weak var inputbutton: UIButton!
-    private let realm = try! Realm()
+    let realm = try! Realm()
     var inputList:Results<InputList>!
     private var input = [InputList]()
     private var il = [""]
@@ -48,19 +54,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let button = UIButton()
     let cellIdentifier = "InputTableViewCell"
     override func viewDidLoad() {
-        super.viewDidLoad()
+        
         input = realm.objects(InputList.self).map({$0})
-//        self.tableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
-        self.tableView.delegate=self
-        self.tableView.dataSource=self
+        self.InputTableView.delegate=self
+        self.InputTableView.dataSource=self
+        self.InputTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
         self.inputList = realm.objects(InputList.self)
         for i in inputList{
             il.append(i.content)
         }
         il.removeFirst()
-        self.tableView.reloadData()
         let hoge = il.joined(separator: "、っ、")
         initView(i: hoge)
+        self.InputTableView.reloadData()
+        super.viewDidLoad()
     }
     @IBOutlet weak var moveInput: UIButton!
 //    @IBAction func btnAdd(_ sender: Any){
@@ -81,7 +88,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //    }
     override func viewWillAppear(_ animated:Bool){
         super.viewWillAppear(animated)
-        self.tableView.reloadData()
+        self.InputTableView.reloadData()
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
     }
     override func didReceiveMemoryWarning() {
@@ -91,7 +98,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         label.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
         label.center = CGPoint(x: self.view.center.x, y: self.view.center.y-180)
         label.text = i
-        label.textColor = UIColor.white
+        label.textColor = UIColor.black
         self.view.addSubview(label)
         button.frame = CGRect(x: 0, y: 300, width: 300, height: 30)
         button.center = CGPoint(x: self.view.center.x, y: 150)
@@ -113,7 +120,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             realm.add(newInput)
                             print("ToDo Saved")
             })
-            self.tableView.reloadData()
+            self.InputTableView.reloadData()
             il.append(inputList[inputList.count-1].content)
             let hoge = il.joined(separator: "、っ、")
             label.text = hoge
@@ -129,8 +136,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
-        let tmpCell: InputList = self.inputList[(indexPath as NSIndexPath).row];
-        cell.inputLabel.text = tmpCell.content
+        cell.inputLabel.text = inputList[indexPath.row].content
+        cell.checkBtn.tag = indexPath.row
+        cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
+        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
         return cell
     }
     
@@ -140,7 +149,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 realm.delete(inputList[indexPath.row])
             }
             // テーブルのデータ削除
-            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.InputTableView.deleteRows(at: [indexPath], with: .automatic)
         il.remove(at: indexPath.row)
         let hoge = il.joined(separator: "、っ、")
         label.text = hoge
@@ -157,7 +166,9 @@ class CheckBox: UIButton {
     // Images
     let checkedImage = UIImage(named: "check_on")! as UIImage
     let uncheckedImage = UIImage(named: "check_off")! as UIImage
-
+    let realm = try! Realm()
+    
+    var inputList:Results<InputList>?
     // Bool property
     var isChecked: Bool = false {
         didSet{
@@ -172,6 +183,7 @@ class CheckBox: UIButton {
     override func awakeFromNib() {
         self.addTarget(self, action:#selector(buttonClicked(sender:)), for: UIControl.Event.touchUpInside)
         self.isChecked = false
+        self.inputList = realm.objects(InputList.self)
     }
 
 
@@ -179,6 +191,12 @@ class CheckBox: UIButton {
     @objc func buttonClicked(sender: UIButton) {
         if sender == self {
             isChecked = !isChecked
+        }
+        print(inputList)
+        var target = inputList?[tag]
+        try! realm.write{
+            target?.isChecked = self.isChecked
+            realm.add(target!, update:.modified)
         }
     }
 }
