@@ -51,13 +51,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         input = realm.objects(InputList.self).map({$0})
 //        self.tableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: cellIdentifier)
-//        self.tableView.delegate=self
-//        self.tableView.dataSource=self
+        self.tableView.delegate=self
+        self.tableView.dataSource=self
         self.inputList = realm.objects(InputList.self)
         for i in inputList{
             il.append(i.content)
         }
         il.removeFirst()
+        self.tableView.reloadData()
         let hoge = il.joined(separator: "、っ、")
         initView(i: hoge)
     }
@@ -127,7 +128,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         return self.inputList.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier,for: indexPath) as! InputTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
         let tmpCell: InputList = self.inputList[(indexPath as NSIndexPath).row];
         cell.inputLabel.text = tmpCell.content
         return cell
