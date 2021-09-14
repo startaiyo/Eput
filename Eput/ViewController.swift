@@ -46,6 +46,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var InputTableView: UITableView!
     @IBOutlet weak var inputbutton: UIButton!
+    var token:NotificationToken!
     let realm = try! Realm()
     var inputList:Results<InputList>!
     private var input = [InputList]()
@@ -61,13 +62,28 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.InputTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
         self.inputList = realm.objects(InputList.self)
         for i in inputList{
+            if i.isChecked{
             il.append(i.content)
+        }
         }
         il.removeFirst()
         let hoge = il.joined(separator: "、っ、")
         initView(i: hoge)
-        self.InputTableView.reloadData()
-        super.viewDidLoad()
+        token = realm.observe{ notification, realm in
+            //変更があった場合にtableViewを更新
+            self.InputTableView.reloadData()
+            self.inputList = realm.objects(InputList.self)
+            self.il = [""]
+            for i in self.inputList{
+                if i.isChecked{
+                    self.il.append(i.content)
+            }
+            }
+            self.il.removeFirst()
+            let hoge = self.il.joined(separator: "、っ、")
+            self.initView(i: hoge)
+            super.viewDidLoad()
+        }
     }
     @IBOutlet weak var moveInput: UIButton!
 //    @IBAction func btnAdd(_ sender: Any){
@@ -96,9 +112,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     func initView(i: String){
         label.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
-        label.center = CGPoint(x: self.view.center.x, y: self.view.center.y-180)
+        label.center = CGPoint(x: self.view.center.x, y: 50)
         label.text = i
-        label.textColor = UIColor.black
+        label.textColor = UIColor.white
         self.view.addSubview(label)
         button.frame = CGRect(x: 0, y: 300, width: 300, height: 30)
         button.center = CGPoint(x: self.view.center.x, y: 150)
@@ -121,9 +137,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                             print("ToDo Saved")
             })
             self.InputTableView.reloadData()
-            il.append(inputList[inputList.count-1].content)
-            let hoge = il.joined(separator: "、っ、")
-            label.text = hoge
         }catch{
             print("Saving Is Failed")
         }
@@ -145,14 +158,26 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             // Realmのデータ削除
-            try! realm.write {
+            try! realm.write(withoutNotifying:[token]) {
                 realm.delete(inputList[indexPath.row])
             }
             // テーブルのデータ削除
             self.InputTableView.deleteRows(at: [indexPath], with: .automatic)
-        il.remove(at: indexPath.row)
-        let hoge = il.joined(separator: "、っ、")
-        label.text = hoge
+        self.perform(#selector(reloadTable), with: nil, afterDelay: 0.1)
+        self.inputList = realm.objects(InputList.self)
+        self.il = [""]
+        for i in self.inputList{
+            if i.isChecked{
+                self.il.append(i.content)
+        }
+        }
+        self.il.removeFirst()
+        let hoge = self.il.joined(separator: "、っ、")
+        self.initView(i: hoge)
+    }
+    @objc func reloadTable() {
+        print("reloaded")
+        self.InputTableView.reloadData()
     }
     @objc func speech(){
         let speechSynthesizer = AVSpeechSynthesizer()
@@ -192,7 +217,7 @@ class CheckBox: UIButton {
         if sender == self {
             isChecked = !isChecked
         }
-        print(inputList)
+        print(tag)
         var target = inputList?[tag]
         try! realm.write{
             target?.isChecked = self.isChecked
