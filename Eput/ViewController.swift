@@ -126,6 +126,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         inputbutton.frame = CGRect(x: 110, y: 100, width: 300, height: 30)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
         inputField.frame = CGRect(x: 20, y: 100, width: 150, height: 30)
+        valid(inputField)
+        inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
     }
     @objc func btnSave(_ sender: Any){
         let inputContent = inputField.text
@@ -140,6 +142,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }catch{
             print("Saving Is Failed")
         }
+    }
+    @objc func valid(_ textField: UITextField){
+        if (textField.text == "") {
+            self.inputbutton.isEnabled = false
+            return
+        }
+        print(textField.text!)
+        self.inputbutton.isEnabled = true
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
             return true
@@ -176,7 +186,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.initView(i: hoge)
     }
     @objc func reloadTable() {
-        print("reloaded")
         self.InputTableView.reloadData()
     }
     @objc func speech(){
