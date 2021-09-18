@@ -46,6 +46,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var InputTableView: UITableView!
     @IBOutlet weak var inputbutton: UIButton!
+    @IBOutlet weak var languageField: UITextField!
     var token:NotificationToken!
     let realm = try! Realm()
     var inputList:Results<InputList>!
@@ -54,6 +55,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let label = UILabel()
     let button = UIButton()
     let cellIdentifier = "InputTableViewCell"
+    var pickerView: UIPickerView = UIPickerView()
+    let langlist: [String] = ["ja-JP","en-US"]
     override func viewDidLoad() {
         
         input = realm.objects(InputList.self).map({$0})
@@ -84,6 +87,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.initView(i: hoge)
             super.viewDidLoad()
         }
+        // ピッカー設定
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        pickerView.showsSelectionIndicator = true
+                
+                // 決定バーの生成
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+        let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        toolbar.setItems([spacelItem, doneItem], animated: true)
+                
+                // インプットビュー設定
+        languageField.inputView = pickerView
+        languageField.inputAccessoryView = toolbar
     }
     @IBOutlet weak var moveInput: UIButton!
 //    @IBAction func btnAdd(_ sender: Any){
@@ -195,6 +212,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         utterance.voice = voice
         speechSynthesizer.speak(utterance)
     }
+    @objc func done() {
+            languageField.endEditing(true)
+            languageField.text = "\(langlist[pickerView.selectedRow(inComponent: 0)])"
+    }
 }
 class CheckBox: UIButton {
     // Images
@@ -233,4 +254,45 @@ class CheckBox: UIButton {
             realm.add(target!, update:.modified)
         }
     }
+}
+
+extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
+
+   // ドラムロールの列数
+   func numberOfComponents(in pickerView: UIPickerView) -> Int {
+       return 1
+   }
+   
+   // ドラムロールの行数
+   func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+       /*
+        列が複数ある場合は
+        if component == 0 {
+        } else {
+        ...
+        }
+        こんな感じで分岐が可能
+        */
+       return langlist.count
+   }
+   
+   // ドラムロールの各タイトル
+   func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+       /*
+        列が複数ある場合は
+        if component == 0 {
+        } else {
+        ...
+        }
+        こんな感じで分岐が可能
+        */
+       return langlist[row]
+   }
+   
+   /*
+   // ドラムロール選択時
+   func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+       self.textField.text = list[row]
+   }
+    */
 }

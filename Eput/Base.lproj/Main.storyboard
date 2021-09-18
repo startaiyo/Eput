@@ -50,6 +50,12 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="YY7-Vy-3nC"/>
                                 </connections>
                             </tableView>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="FPd-Ly-L0f">
+                                <rect key="frame" x="159" y="33" width="97" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -68,6 +74,7 @@
                         <outlet property="InputTableView" destination="03k-Os-Mv8" id="YmL-mm-mdf"/>
                         <outlet property="inputField" destination="oeN-iD-PIM" id="Eck-Z9-EHD"/>
                         <outlet property="inputbutton" destination="c6Q-pd-C0a" id="xM6-o6-7dG"/>
+                        <outlet property="languageField" destination="FPd-Ly-L0f" id="Xmr-hl-Rda"/>
                         <outlet property="moveInput" destination="c6Q-pd-C0a" id="ScE-T1-07B"/>
                     </connections>
                 </viewController>
