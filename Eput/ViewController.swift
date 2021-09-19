@@ -101,6 +101,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 // インプットビュー設定
         languageField.inputView = pickerView
         languageField.inputAccessoryView = toolbar
+        
+        pickerView.selectRow(0, inComponent: 0, animated: false)
     }
     @IBOutlet weak var moveInput: UIButton!
 //    @IBAction func btnAdd(_ sender: Any){
@@ -208,7 +210,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc func speech(){
         let speechSynthesizer = AVSpeechSynthesizer()
         let utterance = AVSpeechUtterance(string: self.label.text!)
-        let voice = AVSpeechSynthesisVoice(language: "ja-JP")
+        let voice = AVSpeechSynthesisVoice(language: languageField.text)
         utterance.voice = voice
         speechSynthesizer.speak(utterance)
     }
