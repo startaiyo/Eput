@@ -47,6 +47,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var InputTableView: UITableView!
     @IBOutlet weak var inputbutton: UIButton!
     @IBOutlet weak var languageField: UITextField!
+    @IBOutlet weak var languageLabel: UILabel!
+    @IBOutlet weak var inputLabel: UILabel!
     var token:NotificationToken!
     let realm = try! Realm()
     var inputList:Results<InputList>!
@@ -132,7 +134,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func initView(i: String){
         label.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
         label.center = CGPoint(x: self.view.center.x, y: 50)
-        label.text = i
+        label.text = ""
         label.textColor = UIColor.white
         self.view.addSubview(label)
         button.frame = CGRect(x: 0, y: 300, width: 300, height: 30)
@@ -144,9 +146,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(button)
         inputbutton.frame = CGRect(x: 110, y: 100, width: 300, height: 30)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
-        inputField.frame = CGRect(x: 20, y: 100, width: 150, height: 30)
+        inputField.frame = CGRect(x: 20, y: 180, width: 150, height: 30)
         valid(inputField)
         inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
+        languageField.frame = CGRect(x: self.view.center.x-50, y: 40, width: 100, height: 30)
     }
     @objc func btnSave(_ sender: Any){
         let inputContent = inputField.text

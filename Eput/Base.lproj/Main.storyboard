@@ -56,6 +56,20 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="input content:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Sz-z3-HrZ">
+                                <rect key="frame" x="35" y="76" width="106" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="language:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gl6-V9-Hgx">
+                                <rect key="frame" x="66" y="36" width="75" height="28"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -73,8 +87,10 @@
                     <connections>
                         <outlet property="InputTableView" destination="03k-Os-Mv8" id="YmL-mm-mdf"/>
                         <outlet property="inputField" destination="oeN-iD-PIM" id="Eck-Z9-EHD"/>
+                        <outlet property="inputLabel" destination="1Sz-z3-HrZ" id="02k-ys-Hez"/>
                         <outlet property="inputbutton" destination="c6Q-pd-C0a" id="xM6-o6-7dG"/>
                         <outlet property="languageField" destination="FPd-Ly-L0f" id="Xmr-hl-Rda"/>
+                        <outlet property="languageLabel" destination="gl6-V9-Hgx" id="j9h-qR-uqt"/>
                         <outlet property="moveInput" destination="c6Q-pd-C0a" id="ScE-T1-07B"/>
                     </connections>
                 </viewController>
