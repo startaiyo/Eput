@@ -134,8 +134,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func initView(i: String){
         label.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
         label.center = CGPoint(x: self.view.center.x, y: 50)
-        label.text = ""
-        label.textColor = UIColor.white
+        label.text = i
+        label.textColor = UIColor.black
         self.view.addSubview(label)
         button.frame = CGRect(x: 0, y: 300, width: 300, height: 30)
         button.center = CGPoint(x: self.view.center.x, y: 150)
