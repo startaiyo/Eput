@@ -7,6 +7,7 @@ class InputList: Object{
     @objc dynamic var createdAt = Date()
     @objc dynamic var content : String = ""
     @objc dynamic var isChecked : Bool = false
+    @objc dynamic var tag : String = ""
     override static func primaryKey() -> String? {
         return "id"
     }
