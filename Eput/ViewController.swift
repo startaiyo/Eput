@@ -12,37 +12,6 @@ class InputList: Object{
         return "id"
     }
 }
-//class NewInputViewController: UIViewController{
-//    @IBOutlet weak var txtContent: UITextField!
-//    @IBOutlet weak var sendbutton: UIButton!
-//    @IBOutlet weak var backbutton: UIButton!
-//    private let realm = try! Realm()
-//    public var completionHandler: (() -> Void)?
-//    override func viewDidLoad() {
-//        super .viewDidLoad()
-//        sendbutton.frame = CGRect(x: 0, y: 200, width: 300, height: 30)
-//        sendbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
-//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(btnSave))
-//        backbutton.frame = CGRect(x: 0, y: 100, width: 300, height: 30)
-//        backbutton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
-//    }
-//    @objc func didTapButton() {
-//        self.dismiss(animated: true, completion: nil)
-//        }
-//    @objc func btnSave(_ sender: Any){
-//        let inputContent = txtContent.text
-//        let newInput = InputList()
-//        newInput.content = inputContent!
-//        do{
-//            try realm.write({ () -> Void in
-//                            realm.add(newInput)
-//                            print("ToDo Saved")
-//            })
-//        }catch{
-//            print("Saving Is Failed")
-//        }
-//    }
-//}
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var InputTableView: UITableView!
@@ -108,22 +77,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         pickerView.selectRow(0, inComponent: 0, animated: false)
     }
     @IBOutlet weak var moveInput: UIButton!
-//    @IBAction func btnAdd(_ sender: Any){
-//        guard let vc = storyboard?.instantiateViewController(identifier: "NewInput")
-//                as? NewInputViewController else{
-//            return
-//        }
-//        vc.completionHandler = {
-//            [weak self] in
-//            self?.refresh()
-//        }
-//        vc.title = "New Input"
-//        vc.navigationItem.largeTitleDisplayMode = .never
-//        navigationController?.pushViewController(vc, animated: true)
-//    }
-//    func refresh(){
-//        input = realm.objects(InputList.self).map({$0})
-//    }
     override func viewWillAppear(_ animated:Bool){
         super.viewWillAppear(animated)
         self.InputTableView.reloadData()
@@ -271,34 +224,11 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
    
    // ドラムロールの行数
    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-       /*
-        列が複数ある場合は
-        if component == 0 {
-        } else {
-        ...
-        }
-        こんな感じで分岐が可能
-        */
        return langlist.count
    }
    
    // ドラムロールの各タイトル
    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-       /*
-        列が複数ある場合は
-        if component == 0 {
-        } else {
-        ...
-        }
-        こんな感じで分岐が可能
-        */
        return langlist[row]
    }
-   
-   /*
-   // ドラムロール選択時
-   func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-       self.textField.text = list[row]
-   }
-    */
 }
