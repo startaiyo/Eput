@@ -19,6 +19,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var languageField: UITextField!
     @IBOutlet weak var languageLabel: UILabel!
     @IBOutlet weak var inputLabel: UILabel!
+    @IBOutlet weak var inputScrollView: UIScrollView!
     var token:NotificationToken!
     let realm = try! Realm()
     var inputList:Results<InputList>!
