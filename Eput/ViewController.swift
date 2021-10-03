@@ -76,6 +76,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         languageField.inputAccessoryView = toolbar
         
         pickerView.selectRow(0, inComponent: 0, animated: false)
+        
+        let titles = ["月","火","水","木","金","土","日"] //タブのタイトル
+
+        //タブの横幅
+        let tabLabelWidth:CGFloat = 100
+        //タブの縦幅(UIScrollViewと一緒にします)
+        let tabLabelHeight:CGFloat = inputScrollView.frame.height
+
+        //タブのx座標．0から始まり，少しずつずらしていく．
+        var originX:CGFloat = 0
+        //titlesで定義したタブを1つずつ用意していく
+        for title in titles {
+            //タブになるUILabelを作る
+            let label = UILabel()
+            label.textAlignment = .center
+            label.frame = CGRect(x:originX, y:0, width:tabLabelWidth, height:tabLabelHeight)
+            label.text = title
+
+            //scrollViewにぺたっとする
+            inputScrollView.addSubview(label)
+
+            //次のタブのx座標を用意する
+            originX += tabLabelWidth
+        }
+
+        //scrollViewのcontentSizeを，タブ全体のサイズに合わせてあげる(ここ重要！)
+        //最終的なoriginX = タブ全体の横幅 になります
+        inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
@@ -99,12 +127,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         button.setTitle("input読み上げ", for: .normal)
         button.addTarget(self, action: #selector(ViewController.speech), for: .touchUpInside)
         self.view.addSubview(button)
-        inputbutton.frame = CGRect(x: 110, y: 100, width: 300, height: 30)
+//        inputbutton.frame = CGRect(x: 110, y: 100, width: 300, height: 30)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
-        inputField.frame = CGRect(x: 20, y: 180, width: 150, height: 30)
+//        inputField.frame = CGRect(x: 20, y: 180, width: 150, height: 30)
         valid(inputField)
         inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
-        languageField.frame = CGRect(x: self.view.center.x-50, y: 40, width: 100, height: 30)
+//        languageField.frame = CGRect(x: self.view.center.x-50, y: 40, width: 100, height: 30)
     }
     @objc func btnSave(_ sender: Any){
         let inputContent = inputField.text
