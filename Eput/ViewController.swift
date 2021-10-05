@@ -104,6 +104,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //scrollViewのcontentSizeを，タブ全体のサイズに合わせてあげる(ここ重要！)
         //最終的なoriginX = タブ全体の横幅 になります
         inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
+        inputScrollView.delegate = self
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
