@@ -12,7 +12,7 @@ class InputList: Object{
         return "id"
     }
 }
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var InputTableView: UITableView!
     @IBOutlet weak var inputbutton: UIButton!
@@ -30,6 +30,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let cellIdentifier = "InputTableViewCell"
     var pickerView: UIPickerView = UIPickerView()
     let langlist: [String] = ["ja-JP","en-US"]
+    
+    var didPrepareMenu = false
+    let tabLabelWidth:CGFloat = 100
+    
     override func viewDidLoad() {
         
         input = realm.objects(InputList.self).map({$0})
@@ -77,34 +81,34 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         pickerView.selectRow(0, inComponent: 0, animated: false)
         
-        let titles = ["月","火","水","木","金","土","日"] //タブのタイトル
-
-        //タブの横幅
-        let tabLabelWidth:CGFloat = 100
-        //タブの縦幅(UIScrollViewと一緒にします)
-        let tabLabelHeight:CGFloat = inputScrollView.frame.height
-
-        //タブのx座標．0から始まり，少しずつずらしていく．
-        var originX:CGFloat = 0
-        //titlesで定義したタブを1つずつ用意していく
-        for title in titles {
-            //タブになるUILabelを作る
-            let label = UILabel()
-            label.textAlignment = .center
-            label.frame = CGRect(x:originX, y:0, width:tabLabelWidth, height:tabLabelHeight)
-            label.text = title
-
-            //scrollViewにぺたっとする
-            inputScrollView.addSubview(label)
-
-            //次のタブのx座標を用意する
-            originX += tabLabelWidth
-        }
-
-        //scrollViewのcontentSizeを，タブ全体のサイズに合わせてあげる(ここ重要！)
-        //最終的なoriginX = タブ全体の横幅 になります
-        inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
-        inputScrollView.delegate = self
+//        let titles = ["月","火","水","木","金","土","日"] //タブのタイトル
+//        //一度だけメニュー作成をするためのフラグ
+//        //タブの横幅
+//        let tabLabelWidth:CGFloat = 100
+//        //タブの縦幅(UIScrollViewと一緒にします)
+//        let tabLabelHeight:CGFloat = inputScrollView.frame.height
+//
+//        //タブのx座標．0から始まり，少しずつずらしていく．
+//        var originX:CGFloat = 0
+//        //titlesで定義したタブを1つずつ用意していく
+//        for title in titles {
+//            //タブになるUILabelを作る
+//            let label = UILabel()
+//            label.textAlignment = .center
+//            label.frame = CGRect(x:originX, y:0, width:tabLabelWidth, height:tabLabelHeight)
+//            label.text = title
+//
+//            //scrollViewにぺたっとする
+//            inputScrollView.addSubview(label)
+//
+//            //次のタブのx座標を用意する
+//            originX += tabLabelWidth
+//        }
+//
+//        //scrollViewのcontentSizeを，タブ全体のサイズに合わせてあげる(ここ重要！)
+//        //最終的なoriginX = タブ全体の横幅 になります
+//        inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
+//        inputScrollView.delegate = self
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
@@ -204,6 +208,90 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc func done() {
             languageField.endEditing(true)
             languageField.text = "\(langlist[pickerView.selectedRow(inComponent: 0)])"
+    }
+    //viewDidLoad等で処理を行うと
+    //scrollViewの正しいサイズが取得出来ません
+    override func viewDidLayoutSubviews() {
+
+        //viewDidLayoutSubviewsはviewDidLoadと違い
+        //何度も呼ばれてしまうメソッドなので
+        //一度だけメニュー作成を行うようにします
+        if didPrepareMenu { return }
+        didPrepareMenu = true
+
+        //scrollViewのDelegateを指定
+        inputScrollView.delegate = self
+
+        //タブのタイトル
+        let titles = ["月","火","水","木","金","土","日"] //タブのタイトル
+
+        //タブの縦幅(UIScrollViewと一緒にします)
+        let tabLabelHeight:CGFloat = inputScrollView.frame.height
+
+        //右端にダミーのUILabelを置くことで
+        //一番右のタブもセンターに持ってくることが出来ます
+        let dummyLabelWidth = inputScrollView.frame.size.width/2 - tabLabelWidth/2
+        let headDummyLabel = UILabel()
+        headDummyLabel.frame = CGRect(x:0, y:0, width:dummyLabelWidth, height:tabLabelHeight)
+        inputScrollView.addSubview(headDummyLabel)
+
+        //タブのx座標．
+        //ダミーLabel分，はじめからずらしてあげましょう．
+        var originX:CGFloat = dummyLabelWidth
+        //titlesで定義したタブを1つずつ用意していく
+        for title in titles {
+            //タブになるUILabelを作る
+            let label = UILabel()
+            label.textAlignment = .center
+            label.frame = CGRect(x:originX, y:0, width:tabLabelWidth, height:tabLabelHeight)
+            label.text = title
+
+            //scrollViewにぺたっとする
+            inputScrollView.addSubview(label)
+
+            //次のタブのx座標を用意する
+            originX += tabLabelWidth
+        }
+
+        //左端にダミーのUILabelを置くことで
+        //一番左のタブもセンターに持ってくることが出来ます
+        let tailLabel = UILabel()
+        tailLabel.frame = CGRect(x:originX, y:0, width:dummyLabelWidth, height:tabLabelHeight)
+        inputScrollView.addSubview(tailLabel)
+
+        //ダミーLabel分を足して上げましょう
+        originX += dummyLabelWidth
+
+        //scrollViewのcontentSizeを，タブ全体のサイズに合わせてあげる(ここ重要！)
+        //最終的なoriginX = タブ全体の横幅 になります
+        inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard scrollView == self.inputScrollView else { return }
+
+        //微妙なスクロール位置でスクロールをやめた場合に
+        //ちょうどいいタブをセンターに持ってくるためのアニメーションです
+
+        //現在のスクロールの位置(scrollView.contentOffset.x)から
+        //どこのタブを表示させたいか計算します
+        let index = Int((scrollView.contentOffset.x + tabLabelWidth/2) / tabLabelWidth)
+        let x = index * 100
+        UIView.animate(withDuration: 0.3, animations: {
+            scrollView.contentOffset = CGPoint(x:x, y:0)
+        })
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard scrollView == self.inputScrollView else { return }
+
+        //これも上と同様に
+
+        let index = Int((scrollView.contentOffset.x + tabLabelWidth/2) / tabLabelWidth)
+        let x = index * 100
+        UIView.animate(withDuration: 1.0, animations: {
+            scrollView.contentOffset = CGPoint(x:x, y:0)
+        })
     }
 }
 class CheckBox: UIButton {
