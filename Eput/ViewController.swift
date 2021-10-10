@@ -80,35 +80,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         languageField.inputAccessoryView = toolbar
         
         pickerView.selectRow(0, inComponent: 0, animated: false)
-        
-//        let titles = ["月","火","水","木","金","土","日"] //タブのタイトル
-//        //一度だけメニュー作成をするためのフラグ
-//        //タブの横幅
-//        let tabLabelWidth:CGFloat = 100
-//        //タブの縦幅(UIScrollViewと一緒にします)
-//        let tabLabelHeight:CGFloat = inputScrollView.frame.height
-//
-//        //タブのx座標．0から始まり，少しずつずらしていく．
-//        var originX:CGFloat = 0
-//        //titlesで定義したタブを1つずつ用意していく
-//        for title in titles {
-//            //タブになるUILabelを作る
-//            let label = UILabel()
-//            label.textAlignment = .center
-//            label.frame = CGRect(x:originX, y:0, width:tabLabelWidth, height:tabLabelHeight)
-//            label.text = title
-//
-//            //scrollViewにぺたっとする
-//            inputScrollView.addSubview(label)
-//
-//            //次のタブのx座標を用意する
-//            originX += tabLabelWidth
-//        }
-//
-//        //scrollViewのcontentSizeを，タブ全体のサイズに合わせてあげる(ここ重要！)
-//        //最終的なoriginX = タブ全体の横幅 になります
-//        inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
-//        inputScrollView.delegate = self
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
