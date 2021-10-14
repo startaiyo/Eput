@@ -30,6 +30,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let cellIdentifier = "InputTableViewCell"
     var pickerView: UIPickerView = UIPickerView()
     let langlist: [String] = ["ja-JP","en-US"]
+    var taglist: [String] = []
     
     var didPrepareMenu = false
     let tabLabelWidth:CGFloat = 100
@@ -264,6 +265,37 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             scrollView.contentOffset = CGPoint(x:x, y:0)
         })
     }
+    @IBAction func enterTapped(_ sender: Any) {
+            var alertTextField: UITextField?
+
+            let alert = UIAlertController(
+                title: "Edit Name",
+                message: "Enter new name",
+                preferredStyle: UIAlertController.Style.alert)
+            alert.addTextField(
+                configurationHandler: {(textField: UITextField!) in
+                    alertTextField = textField
+                    print(self.taglist)
+                    // textField.placeholder = "Mike"
+                    // textField.isSecureTextEntry = true
+            })
+            alert.addAction(
+                UIAlertAction(
+                    title: "Cancel",
+                    style: UIAlertAction.Style.cancel,
+                    handler: nil))
+            alert.addAction(
+                UIAlertAction(
+                    title: "OK",
+                    style: UIAlertAction.Style.default) { _ in
+                    if let text = alertTextField?.text {
+                        self.taglist.append(text)
+                    }
+                }
+            )
+
+            self.present(alert, animated: true, completion: nil)
+        }
 }
 class CheckBox: UIButton {
     // Images
