@@ -84,6 +84,12 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="YY7-Vy-3nC"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0mI-h2-hZk">
+                                <rect key="frame" x="156" y="154" width="102" height="31"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="add content"/>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -100,6 +106,7 @@
                     </view>
                     <connections>
                         <outlet property="InputTableView" destination="03k-Os-Mv8" id="YmL-mm-mdf"/>
+                        <outlet property="contentbutton" destination="0mI-h2-hZk" id="FpN-V1-5oG"/>
                         <outlet property="inputField" destination="oeN-iD-PIM" id="Eck-Z9-EHD"/>
                         <outlet property="inputLabel" destination="1Sz-z3-HrZ" id="02k-ys-Hez"/>
                         <outlet property="inputScrollView" destination="2gH-er-xN8" id="emi-hw-U0D"/>
