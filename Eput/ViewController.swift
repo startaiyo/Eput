@@ -31,6 +31,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var pickerView: UIPickerView = UIPickerView()
     let langlist: [String] = ["ja-JP","en-US"]
     var taglist: [String] = []
+    @IBOutlet weak var contentbutton: UIButton!
     
     var didPrepareMenu = false
     let tabLabelWidth:CGFloat = 100
@@ -106,7 +107,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(button)
 //        inputbutton.frame = CGRect(x: 110, y: 100, width: 300, height: 30)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
-//        inputField.frame = CGRect(x: 20, y: 180, width: 150, height: 30)
+        contentbutton.addTarget(self, action: #selector(enterTapped), for: .touchUpInside)
         valid(inputField)
         inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
 //        languageField.frame = CGRect(x: self.view.center.x-50, y: 40, width: 100, height: 30)
