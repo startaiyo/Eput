@@ -12,6 +12,10 @@ class InputList: Object{
         return "id"
     }
 }
+class TagList: Object{
+    @objc dynamic var id : String = UUID().uuidString
+    @objc dynamic var tag : String = ""
+}
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate {
     @IBOutlet weak var inputField: UITextField!
     @IBOutlet weak var InputTableView: UITableView!
@@ -30,7 +34,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let cellIdentifier = "InputTableViewCell"
     var pickerView: UIPickerView = UIPickerView()
     let langlist: [String] = ["ja-JP","en-US"]
-    var taglist: [String] = []
+    var tagList:Results<TagList>!
+    private var tags = [TagList]()
     @IBOutlet weak var contentbutton: UIButton!
     
     var didPrepareMenu = false
@@ -196,7 +201,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         inputScrollView.delegate = self
 
         //タブのタイトル
-        let titles = ["月","火","水","木","金","土","日"] //タブのタイトル
+        let titles = ["あ","い"] //タブのタイトル
 
         //タブの縦幅(UIScrollViewと一緒にします)
         let tabLabelHeight:CGFloat = inputScrollView.frame.height
@@ -276,7 +281,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             alert.addTextField(
                 configurationHandler: {(textField: UITextField!) in
                     alertTextField = textField
-                    print(self.taglist)
+                    print(self.tags)
                     // textField.placeholder = "Mike"
                     // textField.isSecureTextEntry = true
             })
@@ -290,7 +295,19 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     title: "OK",
                     style: UIAlertAction.Style.default) { _ in
                     if let text = alertTextField?.text {
-                        self.taglist.append(text)
+                        let tagContent = alertTextField?.text
+                        let newTag = TagList()
+                        newTag.tag = tagContent!
+                        do{
+                            try self.realm.write({ () -> Void in
+                                self.realm.add(newTag)
+                                print(self.realm.objects(TagList.self))
+                                print("NewTag Saved")
+                            })
+                            self.InputTableView.reloadData()
+                        }catch{
+                            print("Saving Is Failed")
+                        }
                     }
                 }
             )
