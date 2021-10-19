@@ -201,7 +201,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         inputScrollView.delegate = self
 
         //タブのタイトル
-        let titles = ["あ","い"] //タブのタイトル
+        var titles = [String]()
+        
+        for i in realm.objects(TagList.self) {
+            titles.append(i.tag)
+        }
 
         //タブの縦幅(UIScrollViewと一緒にします)
         let tabLabelHeight:CGFloat = inputScrollView.frame.height
