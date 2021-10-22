@@ -24,6 +24,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var languageLabel: UILabel!
     @IBOutlet weak var inputLabel: UILabel!
     @IBOutlet weak var inputScrollView: UIScrollView!
+    @IBOutlet weak var deletetagbutton: UIButton!
     var token:NotificationToken!
     let realm = try! Realm()
     var inputList:Results<InputList>!
@@ -113,6 +114,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        inputbutton.frame = CGRect(x: 110, y: 100, width: 300, height: 30)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
         contentbutton.addTarget(self, action: #selector(enterTapped), for: .touchUpInside)
+        deletetagbutton.addTarget(self, action: #selector(goNext), for: .touchUpInside)
         valid(inputField)
         inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
 //        languageField.frame = CGRect(x: self.view.center.x-50, y: 40, width: 100, height: 30)
@@ -317,6 +319,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             )
 
             self.present(alert, animated: true, completion: nil)
+        }
+    @IBAction func goNext(_ sender: Any) {
+     
+            // ①storyboardのインスタンス取得
+            let storyboard: UIStoryboard = self.storyboard!
+     
+            // ②遷移先ViewControllerのインスタンス取得
+            let nextView = storyboard.instantiateViewController(withIdentifier: "TagView") as! TagTableViewController
+     
+            // ③画面遷移
+            self.present(nextView, animated: true, completion: nil)
         }
 }
 class CheckBox: UIButton {
