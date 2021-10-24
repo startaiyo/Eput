@@ -22,8 +22,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var inputbutton: UIButton!
     @IBOutlet weak var languageField: UITextField!
     @IBOutlet weak var languageLabel: UILabel!
-    @IBOutlet weak var inputLabel: UILabel!
     @IBOutlet weak var inputScrollView: UIScrollView!
+    @IBOutlet weak var inputLabel: UILabel!
     @IBOutlet weak var deletetagbutton: UIButton!
     var token:NotificationToken!
     let realm = try! Realm()
@@ -37,7 +37,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let langlist: [String] = ["ja-JP","en-US"]
     var tagList:Results<TagList>!
     private var tags = [TagList]()
-    @IBOutlet weak var contentbutton: UIButton!
     
     var didPrepareMenu = false
     let tabLabelWidth:CGFloat = 100
@@ -113,7 +112,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(button)
 //        inputbutton.frame = CGRect(x: 110, y: 100, width: 300, height: 30)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
-        contentbutton.addTarget(self, action: #selector(enterTapped), for: .touchUpInside)
         deletetagbutton.addTarget(self, action: #selector(goNext), for: .touchUpInside)
         valid(inputField)
         inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
@@ -196,9 +194,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //viewDidLayoutSubviewsはviewDidLoadと違い
         //何度も呼ばれてしまうメソッドなので
         //一度だけメニュー作成を行うようにします
-        if didPrepareMenu { return }
-        didPrepareMenu = true
-
+//        if didPrepareMenu { return }
+//        didPrepareMenu = true
+        makeTabBar()
+    }
+    func makeTabBar(){
+//        if didPrepareMenu {inputScrollView.removeFromSuperview()}
+//        didPrepareMenu = true
         //scrollViewのDelegateを指定
         inputScrollView.delegate = self
 
@@ -212,9 +214,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         //タブの縦幅(UIScrollViewと一緒にします)
         let tabLabelHeight:CGFloat = inputScrollView.frame.height
 
-        //右端にダミーのUILabelを置くことで
+        //右端にダミーのUILabelを置くこと
         //一番右のタブもセンターに持ってくることが出来ます
-        let dummyLabelWidth = inputScrollView.frame.size.width/2 - tabLabelWidth/2
+        let dummyLabelWidth = (inputScrollView.frame.size.width)/2 - tabLabelWidth/2
         let headDummyLabel = UILabel()
         headDummyLabel.frame = CGRect(x:0, y:0, width:dummyLabelWidth, height:tabLabelHeight)
         inputScrollView.addSubview(headDummyLabel)
@@ -245,9 +247,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         //ダミーLabel分を足して上げましょう
         originX += dummyLabelWidth
-
-        //scrollViewのcontentSizeを，タブ全体のサイズに合わせてあげる(ここ重要！)
-        //最終的なoriginX = タブ全体の横幅 になります
         inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
     }
 
@@ -277,60 +276,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             scrollView.contentOffset = CGPoint(x:x, y:0)
         })
     }
-    @IBAction func enterTapped(_ sender: Any) {
-            var alertTextField: UITextField?
-
-            let alert = UIAlertController(
-                title: "Edit Name",
-                message: "Enter new name",
-                preferredStyle: UIAlertController.Style.alert)
-            alert.addTextField(
-                configurationHandler: {(textField: UITextField!) in
-                    alertTextField = textField
-                    print(self.tags)
-                    // textField.placeholder = "Mike"
-                    // textField.isSecureTextEntry = true
-            })
-            alert.addAction(
-                UIAlertAction(
-                    title: "Cancel",
-                    style: UIAlertAction.Style.cancel,
-                    handler: nil))
-            alert.addAction(
-                UIAlertAction(
-                    title: "OK",
-                    style: UIAlertAction.Style.default) { _ in
-                    if let text = alertTextField?.text {
-                        let tagContent = alertTextField?.text
-                        let newTag = TagList()
-                        newTag.tag = tagContent!
-                        do{
-                            try self.realm.write({ () -> Void in
-                                self.realm.add(newTag)
-                                print(self.realm.objects(TagList.self))
-                                print("NewTag Saved")
-                            })
-                            self.InputTableView.reloadData()
-                        }catch{
-                            print("Saving Is Failed")
-                        }
-                    }
-                }
-            )
-
-            self.present(alert, animated: true, completion: nil)
-        }
+    
     @IBAction func goNext(_ sender: Any) {
+//        inputScrollView.removeFromSuperview();
      
             // ①storyboardのインスタンス取得
-            let storyboard: UIStoryboard = self.storyboard!
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
      
             // ②遷移先ViewControllerのインスタンス取得
-            let nextView = storyboard.instantiateViewController(withIdentifier: "TagView") as! TagTableViewController
-     
+        let nextView = storyboard.instantiateViewController(withIdentifier: "TagTagleViewController") as! TagTableViewController
+        nextView.callBack = {self.callBack()}
             // ③画面遷移
             self.present(nextView, animated: true, completion: nil)
         }
+    func callBack(){
+        makeTabBar()
+    }
 }
 class CheckBox: UIButton {
     // Images
