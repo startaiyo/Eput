@@ -206,7 +206,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         //タブのタイトル
         var titles = [String]()
-        
+
         for i in realm.objects(TagList.self) {
             titles.append(i.tag)
         }
@@ -237,6 +237,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
             //次のタブのx座標を用意する
             originX += tabLabelWidth
+        print("tabbar")
         }
 
         //左端にダミーのUILabelを置くことで
