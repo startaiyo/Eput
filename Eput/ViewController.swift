@@ -87,6 +87,47 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         languageField.inputAccessoryView = toolbar
         
         pickerView.selectRow(0, inComponent: 0, animated: false)
+        
+        for site in siteInfo {
+
+                    let controller:ContentsViewController = ContentsViewController(nibName: "ContentsViewController", bundle: nil)
+
+                    controller.title = site["title"]!
+                    controller.content = site["url"]!
+
+//                    controller.webView = UIWebView(frame : self.view.bounds)
+//            controller.webView.delegate = controller as! UIWebViewDelegate
+//                    controller.view.addSubview(controller.webView)
+//                    let req = URLRequest(url: URL(string:controller.siteUrl!)!)
+//                    controller.webView.loadRequest(req)
+                    controllerArray.append(controller)
+
+                }
+
+                // Customize menu (Optional)
+                let parameters: [CAPSPageMenuOption] = [
+                    .scrollMenuBackgroundColor(UIColor.white),
+                    .viewBackgroundColor(UIColor.white),
+                    .bottomMenuHairlineColor(UIColor.blue),
+                    .selectionIndicatorColor(UIColor.red),
+                    .menuItemFont(UIFont(name: "HelveticaNeue", size: 14.0)!),
+                    .centerMenuItems(true),
+                    .menuItemWidthBasedOnTitleTextWidth(true),
+                    .menuMargin(16),
+                    .selectedMenuItemLabelColor(UIColor.black),
+                    .unselectedMenuItemLabelColor(UIColor.gray)
+
+                ]
+
+                // Initialize scroll menu
+
+                let rect = CGRect(origin: CGPoint(x: 0,y :20), size: CGSize(width: self.view.frame.width, height: self.view.frame.height))
+                pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: rect, pageMenuOptions: parameters)
+
+        self.addChild(pageMenu!)
+                self.view.addSubview(pageMenu!.view)
+
+        pageMenu!.didMove(toParent: self)
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
@@ -189,94 +230,94 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     //viewDidLoad等で処理を行うと
     //scrollViewの正しいサイズが取得出来ません
-    override func viewDidLayoutSubviews() {
+//    override func viewDidLayoutSubviews() {
+//
+//        //viewDidLayoutSubviewsはviewDidLoadと違い
+//        //何度も呼ばれてしまうメソッドなので
+//        //一度だけメニュー作成を行うようにします
+////        if didPrepareMenu { return }
+////        didPrepareMenu = true
+//        makeTabBar()
+//    }
+//    func makeTabBar(){
+////        if didPrepareMenu {inputScrollView.removeFromSuperview()}
+////        didPrepareMenu = true
+//        //scrollViewのDelegateを指定
+//        inputScrollView.delegate = self
+//
+//        //タブのタイトル
+//        var titles = [String]()
+//
+//        for i in realm.objects(TagList.self) {
+//            titles.append(i.tag)
+//        }
+//
+//        //タブの縦幅(UIScrollViewと一緒にします)
+//        let tabLabelHeight:CGFloat = inputScrollView.frame.height
+//
+//        //右端にダミーのUILabelを置くこと
+//        //一番右のタブもセンターに持ってくることが出来ます
+//        let dummyLabelWidth = (inputScrollView.frame.size.width)/2 - tabLabelWidth/2
+//        let headDummyLabel = UILabel()
+//        headDummyLabel.frame = CGRect(x:0, y:0, width:dummyLabelWidth, height:tabLabelHeight)
+//        inputScrollView.addSubview(headDummyLabel)
+//
+//        //タブのx座標．
+//        //ダミーLabel分，はじめからずらしてあげましょう．
+//        var originX:CGFloat = dummyLabelWidth
+//        //titlesで定義したタブを1つずつ用意していく
+//        for title in titles {
+//            //タブになるUILabelを作る
+//            let label = UILabel()
+//            label.textAlignment = .center
+//            label.frame = CGRect(x:originX, y:0, width:tabLabelWidth, height:tabLabelHeight)
+//            label.text = title
+//
+//            //scrollViewにぺたっとする
+//            inputScrollView.addSubview(label)
+//
+//            //次のタブのx座標を用意する
+//            originX += tabLabelWidth
+//        print("tabbar")
+//        }
+//
+//        //左端にダミーのUILabelを置くことで
+//        //一番左のタブもセンターに持ってくることが出来ます
+//        let tailLabel = UILabel()
+//        tailLabel.frame = CGRect(x:originX, y:0, width:dummyLabelWidth, height:tabLabelHeight)
+//        inputScrollView.addSubview(tailLabel)
+//
+//        //ダミーLabel分を足して上げましょう
+//        originX += dummyLabelWidth
+//        inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
+//    }
 
-        //viewDidLayoutSubviewsはviewDidLoadと違い
-        //何度も呼ばれてしまうメソッドなので
-        //一度だけメニュー作成を行うようにします
-//        if didPrepareMenu { return }
-//        didPrepareMenu = true
-        makeTabBar()
-    }
-    func makeTabBar(){
-//        if didPrepareMenu {inputScrollView.removeFromSuperview()}
-//        didPrepareMenu = true
-        //scrollViewのDelegateを指定
-        inputScrollView.delegate = self
+//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+//        guard scrollView == self.inputScrollView else { return }
+//
+//        //微妙なスクロール位置でスクロールをやめた場合に
+//        //ちょうどいいタブをセンターに持ってくるためのアニメーションです
+//
+//        //現在のスクロールの位置(scrollView.contentOffset.x)から
+//        //どこのタブを表示させたいか計算します
+//        let index = Int((scrollView.contentOffset.x + tabLabelWidth/2) / tabLabelWidth)
+//        let x = index * 100
+//        UIView.animate(withDuration: 0.3, animations: {
+//            scrollView.contentOffset = CGPoint(x:x, y:0)
+//        })
+//    }
 
-        //タブのタイトル
-        var titles = [String]()
-
-        for i in realm.objects(TagList.self) {
-            titles.append(i.tag)
-        }
-
-        //タブの縦幅(UIScrollViewと一緒にします)
-        let tabLabelHeight:CGFloat = inputScrollView.frame.height
-
-        //右端にダミーのUILabelを置くこと
-        //一番右のタブもセンターに持ってくることが出来ます
-        let dummyLabelWidth = (inputScrollView.frame.size.width)/2 - tabLabelWidth/2
-        let headDummyLabel = UILabel()
-        headDummyLabel.frame = CGRect(x:0, y:0, width:dummyLabelWidth, height:tabLabelHeight)
-        inputScrollView.addSubview(headDummyLabel)
-
-        //タブのx座標．
-        //ダミーLabel分，はじめからずらしてあげましょう．
-        var originX:CGFloat = dummyLabelWidth
-        //titlesで定義したタブを1つずつ用意していく
-        for title in titles {
-            //タブになるUILabelを作る
-            let label = UILabel()
-            label.textAlignment = .center
-            label.frame = CGRect(x:originX, y:0, width:tabLabelWidth, height:tabLabelHeight)
-            label.text = title
-
-            //scrollViewにぺたっとする
-            inputScrollView.addSubview(label)
-
-            //次のタブのx座標を用意する
-            originX += tabLabelWidth
-        print("tabbar")
-        }
-
-        //左端にダミーのUILabelを置くことで
-        //一番左のタブもセンターに持ってくることが出来ます
-        let tailLabel = UILabel()
-        tailLabel.frame = CGRect(x:originX, y:0, width:dummyLabelWidth, height:tabLabelHeight)
-        inputScrollView.addSubview(tailLabel)
-
-        //ダミーLabel分を足して上げましょう
-        originX += dummyLabelWidth
-        inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
-    }
-
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        guard scrollView == self.inputScrollView else { return }
-
-        //微妙なスクロール位置でスクロールをやめた場合に
-        //ちょうどいいタブをセンターに持ってくるためのアニメーションです
-
-        //現在のスクロールの位置(scrollView.contentOffset.x)から
-        //どこのタブを表示させたいか計算します
-        let index = Int((scrollView.contentOffset.x + tabLabelWidth/2) / tabLabelWidth)
-        let x = index * 100
-        UIView.animate(withDuration: 0.3, animations: {
-            scrollView.contentOffset = CGPoint(x:x, y:0)
-        })
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard scrollView == self.inputScrollView else { return }
-
-        //これも上と同様に
-
-        let index = Int((scrollView.contentOffset.x + tabLabelWidth/2) / tabLabelWidth)
-        let x = index * 100
-        UIView.animate(withDuration: 1.0, animations: {
-            scrollView.contentOffset = CGPoint(x:x, y:0)
-        })
-    }
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        guard scrollView == self.inputScrollView else { return }
+//
+//        //これも上と同様に
+//
+//        let index = Int((scrollView.contentOffset.x + tabLabelWidth/2) / tabLabelWidth)
+//        let x = index * 100
+//        UIView.animate(withDuration: 1.0, animations: {
+//            scrollView.contentOffset = CGPoint(x:x, y:0)
+//        })
+//    }
     
     @IBAction func goNext(_ sender: Any) {
 //        inputScrollView.removeFromSuperview();
@@ -291,8 +332,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.present(nextView, animated: true, completion: nil)
         }
     func callBack(){
-        makeTabBar()
+//        makeTabBar()
+        print("back")
     }
+    var controllerArray : [UIViewController] = []
+//    let sb = UIStoryboard(name:"Main",bundle:nil)
+//    let viewController = sb.instantiateViewController(withIdentifier: "ViewController")
+        var pageMenu : CAPSPageMenu?
+
+        // サイト情報
+        let siteInfo:[Dictionary<String,String>] = [
+            ["title":"ヤフー！知恵袋","url":"http://chiebukuro.yahoo.co.jp/"],
+            ["title":"教えて！goo","url":"http://oshiete.goo.ne.jp/"],
+            ["title":"OKWAVE","url":"http://okwave.jp/"],
+            ["title":"発言小町","url":"http://komachi.yomiuri.co.jp/"],
+            ["title":"BIGLOBEなんでも相談室","url":"http://soudan.biglobe.ne.jp/sp/"]
+        ]
 }
 class CheckBox: UIButton {
     // Images
