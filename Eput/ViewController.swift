@@ -87,47 +87,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         languageField.inputAccessoryView = toolbar
         
         pickerView.selectRow(0, inComponent: 0, animated: false)
-        
-        for site in siteInfo {
-
-                    let controller:ContentsViewController = ContentsViewController(nibName: "ContentsViewController", bundle: nil)
-
-                    controller.title = site["title"]!
-                    controller.content = site["url"]!
-
-//                    controller.webView = UIWebView(frame : self.view.bounds)
-//            controller.webView.delegate = controller as! UIWebViewDelegate
-//                    controller.view.addSubview(controller.webView)
-//                    let req = URLRequest(url: URL(string:controller.siteUrl!)!)
-//                    controller.webView.loadRequest(req)
-                    controllerArray.append(controller)
-
-                }
-
-                // Customize menu (Optional)
-                let parameters: [CAPSPageMenuOption] = [
-                    .scrollMenuBackgroundColor(UIColor.white),
-                    .viewBackgroundColor(UIColor.white),
-                    .bottomMenuHairlineColor(UIColor.blue),
-                    .selectionIndicatorColor(UIColor.red),
-                    .menuItemFont(UIFont(name: "HelveticaNeue", size: 14.0)!),
-                    .centerMenuItems(true),
-                    .menuItemWidthBasedOnTitleTextWidth(true),
-                    .menuMargin(16),
-                    .selectedMenuItemLabelColor(UIColor.black),
-                    .unselectedMenuItemLabelColor(UIColor.gray)
-
-                ]
-
-                // Initialize scroll menu
-
-                let rect = CGRect(origin: CGPoint(x: 0,y :20), size: CGSize(width: self.view.frame.width, height: self.view.frame.height))
-                pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: rect, pageMenuOptions: parameters)
-
-        self.addChild(pageMenu!)
-                self.view.addSubview(pageMenu!.view)
-
-        pageMenu!.didMove(toParent: self)
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
@@ -335,19 +294,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        makeTabBar()
         print("back")
     }
-    var controllerArray : [UIViewController] = []
-//    let sb = UIStoryboard(name:"Main",bundle:nil)
-//    let viewController = sb.instantiateViewController(withIdentifier: "ViewController")
-        var pageMenu : CAPSPageMenu?
-
-        // サイト情報
-        let siteInfo:[Dictionary<String,String>] = [
-            ["title":"ヤフー！知恵袋","url":"http://chiebukuro.yahoo.co.jp/"],
-            ["title":"教えて！goo","url":"http://oshiete.goo.ne.jp/"],
-            ["title":"OKWAVE","url":"http://okwave.jp/"],
-            ["title":"発言小町","url":"http://komachi.yomiuri.co.jp/"],
-            ["title":"BIGLOBEなんでも相談室","url":"http://soudan.biglobe.ne.jp/sp/"]
-        ]
 }
 class CheckBox: UIButton {
     // Images
@@ -379,7 +325,7 @@ class CheckBox: UIButton {
         if sender == self {
             isChecked = !isChecked
         }
-        print(tag)
+        print("clicked")
         var target = inputList?[tag]
         try! realm.write{
             target?.isChecked = self.isChecked
