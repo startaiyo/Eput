@@ -39,7 +39,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     private var tags = [TagList]()
     
     var didPrepareMenu = false
-    let tabLabelWidth:CGFloat = 100
+//    let tabLabelWidth:CGFloat = 100
     
     override func viewDidLoad() {
         
@@ -325,7 +325,7 @@ class CheckBox: UIButton {
         if sender == self {
             isChecked = !isChecked
         }
-        print("clicked")
+        print(tag)
         var target = inputList?[tag]
         try! realm.write{
             target?.isChecked = self.isChecked

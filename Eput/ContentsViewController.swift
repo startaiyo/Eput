@@ -14,21 +14,6 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     private var input = [InputList]()
     @IBOutlet weak var contentTableViewCell: UITableViewCell!
     @IBOutlet weak var contentTableView: UITableView!
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-            return true
-        }
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.inputList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
-        cell.inputLabel.text = content
-        cell.checkBtn.tag = indexPath.row
-        cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
-        cell.boolLabel.text = ""
-        return cell
-    }
     var content:String!
     var siteUrl:String!
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -52,6 +37,21 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             super.didReceiveMemoryWarning()
             // Dispose of any resources that can be recreated.
         }
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+            return true
+        }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.inputList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
+        cell.inputLabel.text = content
+        cell.checkBtn.tag = indexPath.row
+        cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
+        cell.boolLabel.text = ""
+        return cell
+    }
     /*
     // MARK: - Navigation
 
