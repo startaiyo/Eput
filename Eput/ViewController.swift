@@ -8,7 +8,7 @@ class InputList: Object{
     @objc dynamic var content : String = ""
     @objc dynamic var isChecked : Bool = false
     @objc dynamic var tag : String = ""
-//    @objc dynamic var isCheckedTag : Bool = false
+    @objc dynamic var isCheckedTag : Bool = false
     override static func primaryKey() -> String? {
         return "id"
     }
