@@ -28,7 +28,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         self.contentTableView.delegate=self
         self.contentTableView.dataSource=self
-        self.contentTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
+        self.contentTableView.register(UINib(nibName: "TagTableViewCell", bundle: nil), forCellReuseIdentifier: "TagTableViewCell")
         self.inputList = realm.objects(InputList.self)
         // Do any additional setup after loading the view.
     }
@@ -45,11 +45,10 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
-        cell.inputLabel.text = content
-        cell.checkBtn.tag = indexPath.row
-        cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
-        cell.boolLabel.text = ""
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TagTableViewCell",for: indexPath) as! TagTableViewCell
+        cell.tagLabel.text = content
+        cell.tagCheckBtn.tag = indexPath.row
+        cell.tagCheckBtn.isChecked = inputList[indexPath.row].isChecked
         return cell
     }
     /*
