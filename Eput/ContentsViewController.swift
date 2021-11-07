@@ -12,10 +12,12 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     let realm = try! Realm()
     var inputList:Results<InputList>!
     private var input = [InputList]()
-    @IBOutlet weak var contentTableViewCell: UITableViewCell!
     @IBOutlet weak var contentTableView: UITableView!
+    @IBOutlet weak var contentTableViewCell: UITableViewCell!
+    
     var content:String!
     var siteUrl:String!
+    let cl = ["あああ","いいい","ううう","hoghoe"]
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
             super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         }
@@ -26,9 +28,9 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.contentTableView.delegate=self
-        self.contentTableView.dataSource=self
         self.contentTableView.register(UINib(nibName: "TagTableViewCell", bundle: nil), forCellReuseIdentifier: "TagTableViewCell")
+        self.contentTableView.dataSource=self
+        self.contentTableView.delegate=self
         self.inputList = realm.objects(InputList.self)
         // Do any additional setup after loading the view.
     }
@@ -41,14 +43,17 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             return true
         }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.inputList.count
+        return self.cl.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TagTableViewCell",for: indexPath) as! TagTableViewCell
-        cell.tagLabel.text = content
+        cell.tagLabel.text = cl[indexPath.row]
         cell.tagCheckBtn.tag = indexPath.row
-        cell.tagCheckBtn.isChecked = inputList[indexPath.row].isChecked
+        self.contentTableView.bringSubviewToFront(cell.tagCheckBtn)
+        print("selfとは")
+        print(self)
+//        cell.tagCheckBtn.isChecked = inputList[indexPath.row].isChecked
         return cell
     }
     /*
@@ -61,4 +66,11 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     }
     */
 
+}
+class CustomCell: UITableViewCell {
+    var indexPath = IndexPath()
+
+    @IBAction func pushCellButton(_ sender: UIButton) {
+        print(indexPath.row)
+    }
 }

@@ -348,7 +348,6 @@ class CheckBox: UIButton {
         if sender == self {
             isChecked = !isChecked
         }
-        print(tag)
         var target = inputList?[tag]
         try! realm.write{
             target?.isChecked = self.isChecked
