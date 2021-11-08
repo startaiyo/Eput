@@ -11,8 +11,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ContentsViewController" customModule="Eput" customModuleProvider="target">
             <connections>
-                <outlet property="contentTableView" destination="dvi-oF-bu8" id="UhL-F9-DLL"/>
-                <outlet property="contentTableViewCell" destination="pEy-QN-rtX" id="A0C-iQ-dcm"/>
+                <outlet property="contentTableView" destination="dvi-oF-bu8" id="I0R-Gc-a1A"/>
+                <outlet property="contentTableViewCell" destination="pEy-QN-rtX" id="cj0-53-U08"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -25,6 +25,10 @@
                     <rect key="frame" x="0.0" y="323" width="414" height="381"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="j3i-L8-Qdo"/>
+                        <outlet property="delegate" destination="-1" id="c3H-L2-WUJ"/>
+                    </connections>
                 </tableView>
                 <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" translatesAutoresizingMaskIntoConstraints="NO" id="pEy-QN-rtX">
                     <rect key="frame" x="0.0" y="323" width="414" height="44"/>

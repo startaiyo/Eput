@@ -40,7 +40,7 @@ class RootViewController: UIViewController {
                 }
 
                 // Customize menu (Optional)
-                let parameters: [CAPSPageMenuOption] = [
+        let parameters: [CAPSPageMenuOption] = [
                     .scrollMenuBackgroundColor(UIColor.white),
                     .viewBackgroundColor(UIColor.white),
                     .bottomMenuHairlineColor(UIColor.blue),
@@ -53,15 +53,17 @@ class RootViewController: UIViewController {
                     .unselectedMenuItemLabelColor(UIColor.gray)
 
                 ]
-
                 // Initialize scroll menu
 
-                let rect = CGRect(origin: CGPoint(x: 0,y :20), size: CGSize(width: self.view.frame.width, height: self.view.frame.height))
-                pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: rect, pageMenuOptions: parameters)
+        let rect = CGRect(origin: CGPoint(x: 0,y :20), size: CGSize(width: self.view.frame.width, height: self.view.frame.height))
+        pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: rect, pageMenuOptions: parameters)
 
         self.addChild(pageMenu!)
-                self.view.addSubview(pageMenu!.view)
-
+        print("self.viewとは")
+        print(self.view)
+        print("です")
+        print(pageMenu!.view)
+        self.view.addSubview(pageMenu!.view)
         pageMenu!.didMove(toParent: self)
     }
 
