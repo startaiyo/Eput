@@ -33,6 +33,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         self.contentTableView.delegate=self
         self.inputList = realm.objects(InputList.self)
         // Do any additional setup after loading the view.
+        print(self.view)
     }
     
     override func didReceiveMemoryWarning() {
@@ -50,9 +51,8 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         let cell = tableView.dequeueReusableCell(withIdentifier: "TagTableViewCell",for: indexPath) as! TagTableViewCell
         cell.tagLabel.text = cl[indexPath.row]
         cell.tagCheckBtn.tag = indexPath.row
-        self.contentTableView.bringSubviewToFront(cell.tagCheckBtn)
-        print("selfとは")
-        print(self)
+        self.view.bringSubviewToFront(self.contentTableView)
+        print(cell)
 //        cell.tagCheckBtn.isChecked = inputList[indexPath.row].isChecked
         return cell
     }
