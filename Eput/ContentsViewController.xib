@@ -30,7 +30,7 @@
                         <outlet property="delegate" destination="-1" id="c3H-L2-WUJ"/>
                     </connections>
                 </tableView>
-                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" translatesAutoresizingMaskIntoConstraints="NO" id="pEy-QN-rtX">
+                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" translatesAutoresizingMaskIntoConstraints="NO" id="pEy-QN-rtX" customClass="TagTableViewCell" customModule="Eput" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="323" width="414" height="44"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pEy-QN-rtX" id="eas-tF-ica" customClass="UITableViewCell" customModule="Eput" customModuleProvider="target">
