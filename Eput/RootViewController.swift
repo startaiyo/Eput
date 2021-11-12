@@ -6,8 +6,18 @@
 //
 
 import UIKit
+import RealmSwift
 
 class RootViewController: UIViewController {
+    let realm = try! Realm()
+    var tagList:Results<TagList>!
+    private var tags = [TagList]()
+    let siteInfo:[Dictionary<String,String>] = [
+                ["title":"ヤフー！知恵袋","url":"http://chiebukuro.yahoo.co.jp/"],
+                ["title":"教えて！goo","url":"http://oshiete.goo.ne.jp/"],
+                ["title":"OKWAVE","url":"http://okwave.jp/"],
+                ["title":"発言小町","url":"http://komachi.yomiuri.co.jp/"]
+            ]
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
             super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         }
@@ -16,8 +26,8 @@ class RootViewController: UIViewController {
             super.init(coder: aDecoder)
         }
     override func viewDidLoad() {
+        self.tagList = realm.objects(TagList.self)
         super.viewDidLoad()
-        print("root")
         // Do any additional setup after loading the view.
         let sb = UIStoryboard(name: "Main", bundle: .main)
         var controllerArray : [UIViewController] = []
@@ -26,9 +36,9 @@ class RootViewController: UIViewController {
         for site in siteInfo {
 
                     let controller:ContentsViewController = ContentsViewController(nibName: "ContentsViewController", bundle: nil)
-
-                    controller.title = site["title"]!
-                    controller.content = site["url"]!
+            print(site["title"]!)
+            controller.title = site["title"]!
+            controller.content = site["url"]!
 
 //                    controller.webView = UIWebView(frame : self.view.bounds)
 //            controller.webView.delegate = controller as! UIWebViewDelegate
@@ -36,9 +46,8 @@ class RootViewController: UIViewController {
 //                    let req = URLRequest(url: URL(string:controller.siteUrl!)!)
 //                    controller.webView.loadRequest(req)
                     controllerArray.append(controller)
-
                 }
-
+        print(controllerArray)
                 // Customize menu (Optional)
         let parameters: [CAPSPageMenuOption] = [
                     .scrollMenuBackgroundColor(UIColor.white),
@@ -59,10 +68,6 @@ class RootViewController: UIViewController {
         pageMenu = CAPSPageMenu(viewControllers: controllerArray, frame: rect, pageMenuOptions: parameters)
 
         self.addChild(pageMenu!)
-        print("self.viewとは")
-        print(self.view)
-        print("です")
-        print(pageMenu!.view)
         self.view.addSubview(pageMenu!.view)
         pageMenu!.didMove(toParent: self)
     }
@@ -70,13 +75,7 @@ class RootViewController: UIViewController {
     var pageMenu : CAPSPageMenu?
 
         // サイト情報
-    let siteInfo:[Dictionary<String,String>] = [
-            ["title":"ヤフー！知恵袋","url":"http://chiebukuro.yahoo.co.jp/"],
-            ["title":"教えて！goo","url":"http://oshiete.goo.ne.jp/"],
-            ["title":"OKWAVE","url":"http://okwave.jp/"],
-            ["title":"発言小町","url":"http://komachi.yomiuri.co.jp/"],
-            ["title":"BIGLOBEなんでも相談室","url":"http://soudan.biglobe.ne.jp/sp/"]
-        ]
+    
     /*
     // MARK: - Navigation
 
