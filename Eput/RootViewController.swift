@@ -16,7 +16,8 @@ class RootViewController: UIViewController {
                 ["title":"ヤフー！知恵袋","url":"http://chiebukuro.yahoo.co.jp/"],
                 ["title":"教えて！goo","url":"http://oshiete.goo.ne.jp/"],
                 ["title":"OKWAVE","url":"http://okwave.jp/"],
-                ["title":"発言小町","url":"http://komachi.yomiuri.co.jp/"]
+                ["title":"発言小町","url":"http://komachi.yomiuri.co.jp/"],
+                ["title":"lll","url":"http://komachi.yomiuri.co.jp/"]
             ]
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
             super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -32,6 +33,7 @@ class RootViewController: UIViewController {
         let sb = UIStoryboard(name: "Main", bundle: .main)
         var controllerArray : [UIViewController] = []
         var viewController = sb.instantiateViewController(withIdentifier: "ViewController")
+        viewController.title = "menu1"
         controllerArray.append(viewController)
         for site in siteInfo {
 
