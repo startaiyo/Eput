@@ -27,16 +27,17 @@ class RootViewController: UIViewController {
             super.init(coder: aDecoder)
         }
     override func viewDidLoad() {
+//        print("rootdidroad")
         self.tagList = realm.objects(TagList.self)
-        var token = realm.observe{ notification, realm in
-            self.tagList = realm.objects(TagList.self)
-            self.viewDidLoad()
-        }
+//        var token = realm.observe{ notification, realm in
+//            self.tagList = realm.objects(TagList.self)
+//            self.viewDidLoad()
+//        }
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         let sb = UIStoryboard(name: "Main", bundle: .main)
         var controllerArray : [UIViewController] = []
-        var viewController = sb.instantiateViewController(withIdentifier: "ViewController")
+        var viewController = sb.instantiateViewController(withIdentifier: "ViewController") as! ViewController
         viewController.title = "menu1"
         controllerArray.append(viewController)
         for info in tagList {
@@ -75,8 +76,12 @@ class RootViewController: UIViewController {
         self.addChild(pageMenu!)
         self.view.addSubview(pageMenu!.view)
         pageMenu!.didMove(toParent: self)
+        viewController.rootCallBack = {self.rootCallBack()}
     }
-
+    func rootCallBack(){
+        print("rootが呼ばれたよ")
+        self.viewDidLoad()
+    }
     var pageMenu : CAPSPageMenu?
 
         // サイト情報
