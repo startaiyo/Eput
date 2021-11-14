@@ -12,12 +12,12 @@ class RootViewController: UIViewController {
     let realm = try! Realm()
     var tagList:Results<TagList>!
     private var tags = [TagList]()
+    var token:NotificationToken!
     let siteInfo:[Dictionary<String,String>] = [
                 ["title":"ヤフー！知恵袋","url":"http://chiebukuro.yahoo.co.jp/"],
                 ["title":"教えて！goo","url":"http://oshiete.goo.ne.jp/"],
-                ["title":"OKWAVE","url":"http://okwave.jp/"],
-                ["title":"発言小町","url":"http://komachi.yomiuri.co.jp/"],
-                ["title":"lll","url":"http://komachi.yomiuri.co.jp/"]
+                ["title":"教えて！goo","url":"http://oshiete.goo.ne.jp/"],
+                ["title":"教えて！goo","url":"http://oshiete.goo.ne.jp/"]
             ]
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
             super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -28,6 +28,10 @@ class RootViewController: UIViewController {
         }
     override func viewDidLoad() {
         self.tagList = realm.objects(TagList.self)
+        var token = realm.observe{ notification, realm in
+            self.tagList = realm.objects(TagList.self)
+            self.viewDidLoad()
+        }
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         let sb = UIStoryboard(name: "Main", bundle: .main)
@@ -35,12 +39,12 @@ class RootViewController: UIViewController {
         var viewController = sb.instantiateViewController(withIdentifier: "ViewController")
         viewController.title = "menu1"
         controllerArray.append(viewController)
-        for site in siteInfo {
+        for info in tagList {
 
                     let controller:ContentsViewController = ContentsViewController(nibName: "ContentsViewController", bundle: nil)
-            print(site["title"]!)
-            controller.title = site["title"]!
-            controller.content = site["url"]!
+            print(info["tag"]!)
+            controller.title = info["tag"] as! String
+//            controller.content = site["url"]!
 
 //                    controller.webView = UIWebView(frame : self.view.bounds)
 //            controller.webView.delegate = controller as! UIWebViewDelegate
@@ -59,10 +63,9 @@ class RootViewController: UIViewController {
                     .menuItemFont(UIFont(name: "HelveticaNeue", size: 14.0)!),
                     .centerMenuItems(true),
                     .menuItemWidthBasedOnTitleTextWidth(true),
-                    .menuMargin(16),
+                    .menuMargin(30),
                     .selectedMenuItemLabelColor(UIColor.black),
                     .unselectedMenuItemLabelColor(UIColor.gray)
-
                 ]
                 // Initialize scroll menu
 

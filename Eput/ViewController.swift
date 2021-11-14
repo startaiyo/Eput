@@ -316,6 +316,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func callBack(){
 //        makeTabBar()
         print("back")
+        print(self.parent)
     }
 }
 class CheckBox: UIButton {
