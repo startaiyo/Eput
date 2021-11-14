@@ -38,6 +38,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let langlist: [String] = ["ja-JP","en-US"]
     var tagList:Results<TagList>!
     private var tags = [TagList]()
+    var rootCallBack: (() -> Void)?
     
     var didPrepareMenu = false
 //    let tabLabelWidth:CGFloat = 100
@@ -315,8 +316,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     func callBack(){
 //        makeTabBar()
-        print("back")
-        print(self.parent)
+        self.rootCallBack?()
     }
 }
 class CheckBox: UIButton {
