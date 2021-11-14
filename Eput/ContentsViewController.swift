@@ -7,6 +7,7 @@
 
 import UIKit
 import RealmSwift
+import AVFoundation
 
 class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate{
     let realm = try! Realm()
@@ -14,10 +15,12 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     private var input = [InputList]()
     @IBOutlet weak var contentTableView: UITableView!
     @IBOutlet weak var contentTableViewCell: UITableViewCell!
-    
-    var content:String!
-    var siteUrl:String!
-    let cl = ["あああ","いいい","ううう","hoghoe"]
+    var ViewController: UIViewController!
+    let utterButton = UIButton()
+    let utterLabel = UILabel()
+    var utterField = UITextField()
+    private var cl = [String]()
+    var token:NotificationToken!
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
             super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         }
@@ -33,8 +36,49 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         self.contentTableView.delegate=self
         self.inputList = realm.objects(InputList.self)
         // Do any additional setup after loading the view.
+        for i in inputList{
+            if i.isChecked{
+                cl.append(i.content)
+            }
+        }
+        let hoge = cl.joined(separator: "、っ、")
+        initView(i: hoge)
+        token = realm.observe{ notification, realm in
+            //変更があった場合にtableViewを更新
+            self.contentTableView.reloadData()
+            self.inputList = realm.objects(InputList.self)
+            self.cl = [String]()
+            for i in self.inputList{
+                if i.isChecked{
+                    self.cl.append(i.content)
+            }
+            }
+            let hoge = self.cl.joined(separator: "、っ、")
+            self.initView(i: hoge)
+            super.viewDidLoad()
+        }
     }
-    
+    func initView(i:String){
+        utterLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
+        utterLabel.center = CGPoint(x: self.view.center.x, y: 50)
+        utterLabel.text = i
+        utterLabel.textColor = UIColor.black
+        self.view.addSubview(utterLabel)
+        utterButton.frame = CGRect(x: 0, y: 300, width: 300, height: 30)
+        utterButton.center = CGPoint(x: self.view.center.x, y: 150)
+        utterButton.backgroundColor = UIColor.red
+        utterButton.titleLabel?.textColor = UIColor.white
+        utterButton.setTitle("input読み上げ", for: .normal)
+        utterButton.addTarget(self, action: #selector(speech), for: .touchUpInside)
+        self.view.addSubview(utterButton)
+    }
+    @objc func speech(){
+        let speechSynthesizer = AVSpeechSynthesizer()
+        let utterance = AVSpeechUtterance(string: self.utterLabel.text!)
+        let voice = AVSpeechSynthesisVoice(language: utterField.text)
+        utterance.voice = voice
+        speechSynthesizer.speak(utterance)
+    }
     override func didReceiveMemoryWarning() {
             super.didReceiveMemoryWarning()
             // Dispose of any resources that can be recreated.
