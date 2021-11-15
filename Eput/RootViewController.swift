@@ -45,7 +45,7 @@ class RootViewController: UIViewController {
                     let controller:ContentsViewController = ContentsViewController(nibName: "ContentsViewController", bundle: nil)
             print(info["tag"]!)
             controller.title = info["tag"] as! String
-            controller.utterField.text? = viewController.languageField.text!
+            controller.utterField.text = "ja-JP"
 //            controller.content = site["url"]!
 
 //                    controller.webView = UIWebView(frame : self.view.bounds)

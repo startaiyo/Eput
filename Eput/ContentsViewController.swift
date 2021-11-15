@@ -36,13 +36,15 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         self.contentTableView.delegate=self
         self.inputList = realm.objects(InputList.self)
         // Do any additional setup after loading the view.
+        self.cl = [String]()
         for i in inputList{
             if i.isChecked{
                 cl.append(i.content)
             }
         }
+        self.contentTableView.reloadData()
         let hoge = cl.joined(separator: "、っ、")
-        initView(i: hoge)
+        self.initView(i: hoge)
         token = realm.observe{ notification, realm in
             //変更があった場合にtableViewを更新
             self.contentTableView.reloadData()
@@ -59,6 +61,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         }
     }
     func initView(i:String){
+        print("initview")
         utterLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
         utterLabel.center = CGPoint(x: self.view.center.x, y: 50)
         utterLabel.text = i
@@ -83,6 +86,16 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             super.didReceiveMemoryWarning()
             // Dispose of any resources that can be recreated.
         }
+    override func viewDidAppear(_ animated: Bool) {
+        self.cl = [String]()
+        for i in inputList{
+            if i.isChecked{
+                cl.append(i.content)
+            }
+        }
+        let hoge = cl.joined(separator: "、っ、")
+        self.viewDidLoad()
+    }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
             return true
         }

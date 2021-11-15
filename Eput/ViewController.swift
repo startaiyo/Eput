@@ -23,6 +23,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var inputbutton: UIButton!
     @IBOutlet weak var languageField: UITextField!
     @IBOutlet weak var languageLabel: UILabel!
+    @IBOutlet weak var tagLabel: UILabel!
+    @IBOutlet weak var tagField: UITextField!
     @IBOutlet weak var inputScrollView: UIScrollView!
     @IBOutlet weak var inputLabel: UILabel!
     @IBOutlet weak var deletetagbutton: UIButton!
@@ -55,6 +57,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             il.append(i.content)
         }
         }
+        self.tagList = realm.objects(TagList.self)
         il.removeFirst()
         let hoge = il.joined(separator: "、っ、")
         initView(i: hoge)
@@ -68,6 +71,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     self.il.append(i.content)
             }
             }
+            self.tagList = realm.objects(TagList.self)
             self.il.removeFirst()
             let hoge = self.il.joined(separator: "、っ、")
             self.initView(i: hoge)
@@ -82,13 +86,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
         let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        let toolbar2 = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+        let spacelItem2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem2 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done2))
         toolbar.setItems([spacelItem, doneItem], animated: true)
-                
+        toolbar2.setItems([spacelItem2,doneItem2],animated: true)
                 // インプットビュー設定
         languageField.inputView = pickerView
         languageField.inputAccessoryView = toolbar
-        
+        tagField.inputView = pickerView
+        tagField.inputAccessoryView = toolbar
         pickerView.selectRow(0, inComponent: 0, animated: false)
+        languageField.text = "ja-JP"
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
@@ -210,6 +219,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @objc func done() {
             languageField.endEditing(true)
             languageField.text = "\(langlist[pickerView.selectedRow(inComponent: 0)])"
+    }
+    @objc func done2() {
+            tagField.endEditing(true)
+            tagField.text = "\(tagList[pickerView.selectedRow(inComponent: 0)])"
     }
     //viewDidLoad等で処理を行うと
     //scrollViewの正しいサイズが取得出来ません
