@@ -37,8 +37,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let button = UIButton()
     let cellIdentifier = "InputTableViewCell"
     var pickerView: UIPickerView = UIPickerView()
+    var pickerView2: UIPickerView = UIPickerView()
     let langlist: [String] = ["ja-JP","en-US"]
     var tagList:Results<TagList>!
+    var taglist=[String]()
     private var tags = [TagList]()
     var rootCallBack: (() -> Void)?
     
@@ -72,6 +74,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             }
             self.tagList = realm.objects(TagList.self)
+            for i in self.tagList{
+                self.taglist.append(i.tag)
+            }
             self.il.removeFirst()
             let hoge = self.il.joined(separator: "、っ、")
             self.initView(i: hoge)
@@ -81,6 +86,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         pickerView.delegate = self
         pickerView.dataSource = self
         pickerView.showsSelectionIndicator = true
+        pickerView.tag = 1
+        pickerView2.delegate = self
+        pickerView2.dataSource = self
+        pickerView2.showsSelectionIndicator = true
+        pickerView2.tag = 2
                 
                 // 決定バーの生成
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
@@ -94,8 +104,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 // インプットビュー設定
         languageField.inputView = pickerView
         languageField.inputAccessoryView = toolbar
-        tagField.inputView = pickerView
-        tagField.inputAccessoryView = toolbar
+        tagField.inputView = pickerView2
+        tagField.inputAccessoryView = toolbar2
         pickerView.selectRow(0, inComponent: 0, animated: false)
         languageField.text = "ja-JP"
     }
@@ -379,11 +389,19 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
    
    // ドラムロールの行数
    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-       return langlist.count
+       if (pickerView.tag == 1){
+           return langlist.count
+       }else{
+           return taglist.count
+       }
    }
    
    // ドラムロールの各タイトル
    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-       return langlist[row]
+       if (pickerView.tag == 1){
+           return langlist[row]
+       }else{
+           return taglist[row]
+       }
    }
 }
