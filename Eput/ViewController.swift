@@ -107,6 +107,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         tagField.inputView = pickerView2
         tagField.inputAccessoryView = toolbar2
         pickerView.selectRow(0, inComponent: 0, animated: false)
+        pickerView2.selectRow(0, inComponent: 0, animated: false)
         languageField.text = "ja-JP"
     }
     @IBOutlet weak var moveInput: UIButton!
@@ -232,7 +233,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     @objc func done2() {
             tagField.endEditing(true)
-            tagField.text = "\(tagList[pickerView.selectedRow(inComponent: 0)])"
+            tagField.text = "\(taglist[pickerView2.selectedRow(inComponent: 0)])"
     }
     //viewDidLoad等で処理を行うと
     //scrollViewの正しいサイズが取得出来ません
