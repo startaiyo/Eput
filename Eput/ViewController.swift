@@ -36,14 +36,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     let label = UILabel()
     let button = UIButton()
     let cellIdentifier = "InputTableViewCell"
-    var pickerView: UIPickerView = UIPickerView()
-    var pickerView2: UIPickerView = UIPickerView()
+    var pickerView = UIPickerView()
+    var pickerView2 = UIPickerView()
     let langlist: [String] = ["ja-JP","en-US"]
     var tagList:Results<TagList>!
     var taglist=[String]()
     private var tags = [TagList]()
     var rootCallBack: (() -> Void)?
-    
+    var pickersw = 0
     var didPrepareMenu = false
 //    let tabLabelWidth:CGFloat = 100
     
@@ -85,27 +85,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // ピッカー設定
         pickerView.delegate = self
         pickerView.dataSource = self
-        pickerView.showsSelectionIndicator = true
         pickerView.tag = 1
         pickerView2.delegate = self
         pickerView2.dataSource = self
-        pickerView2.showsSelectionIndicator = true
         pickerView2.tag = 2
                 
                 // 決定バーの生成
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
         let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
         let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
-        let toolbar2 = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
-        let spacelItem2 = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let doneItem2 = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done2))
         toolbar.setItems([spacelItem, doneItem], animated: true)
-        toolbar2.setItems([spacelItem2,doneItem2],animated: true)
                 // インプットビュー設定
         languageField.inputView = pickerView
         languageField.inputAccessoryView = toolbar
         tagField.inputView = pickerView2
-        tagField.inputAccessoryView = toolbar2
+        tagField.inputAccessoryView = toolbar
         pickerView.selectRow(0, inComponent: 0, animated: false)
         pickerView2.selectRow(0, inComponent: 0, animated: false)
         languageField.text = "ja-JP"
@@ -228,12 +222,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         speechSynthesizer.speak(utterance)
     }
     @objc func done() {
+        if (pickersw == 0){
             languageField.endEditing(true)
             languageField.text = "\(langlist[pickerView.selectedRow(inComponent: 0)])"
-    }
-    @objc func done2() {
+        }
+        else {
             tagField.endEditing(true)
             tagField.text = "\(taglist[pickerView2.selectedRow(inComponent: 0)])"
+        }
     }
     //viewDidLoad等で処理を行うと
     //scrollViewの正しいサイズが取得出来ません
@@ -400,8 +396,10 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
    // ドラムロールの各タイトル
    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
        if (pickerView.tag == 1){
+           pickersw = 0
            return langlist[row]
        }else{
+           pickersw = 1
            return taglist[row]
        }
    }
