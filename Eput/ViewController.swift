@@ -60,6 +60,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         }
         self.tagList = realm.objects(TagList.self)
+        for i in self.tagList{
+            self.taglist.append(i.tag)
+        }
         il.removeFirst()
         let hoge = il.joined(separator: "、っ、")
         initView(i: hoge)
@@ -152,7 +155,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.inputbutton.isEnabled = false
             return
         }
-        print(textField.text!)
         self.inputbutton.isEnabled = true
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

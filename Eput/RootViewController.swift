@@ -43,7 +43,6 @@ class RootViewController: UIViewController {
         for info in tagList {
 
                     let controller:ContentsViewController = ContentsViewController(nibName: "ContentsViewController", bundle: nil)
-            print(info["tag"]!)
             controller.title = info["tag"] as! String
             controller.utterField.text = "ja-JP"
 //            controller.content = site["url"]!
@@ -55,7 +54,6 @@ class RootViewController: UIViewController {
 //                    controller.webView.loadRequest(req)
                     controllerArray.append(controller)
                 }
-        print(controllerArray)
                 // Customize menu (Optional)
         let parameters: [CAPSPageMenuOption] = [
                     .scrollMenuBackgroundColor(UIColor.white),
