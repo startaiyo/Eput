@@ -21,6 +21,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     var utterField = UITextField()
     private var cl = [String]()
     var token:NotificationToken!
+    var tag = ""
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
             super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         }
@@ -61,7 +62,6 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         }
     }
     func initView(i:String){
-        print("initview")
         utterLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
         utterLabel.center = CGPoint(x: self.view.center.x, y: 50)
         utterLabel.text = i
