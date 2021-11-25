@@ -44,6 +44,7 @@ class RootViewController: UIViewController {
 
                     let controller:ContentsViewController = ContentsViewController(nibName: "ContentsViewController", bundle: nil)
             controller.title = info["tag"] as! String
+            controller.tag = info["tag"] as! String
             controller.utterField.text = "ja-JP"
 //            controller.content = site["url"]!
 
