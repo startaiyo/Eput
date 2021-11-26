@@ -39,7 +39,8 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         // Do any additional setup after loading the view.
         self.cl = [String]()
         for i in inputList{
-            if i.isChecked{
+            print(i)
+            if i.tag == tag{
                 cl.append(i.content)
             }
         }
@@ -52,7 +53,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             self.inputList = realm.objects(InputList.self)
             self.cl = [String]()
             for i in self.inputList{
-                if i.isChecked{
+                if i.tag == self.tag{
                     self.cl.append(i.content)
             }
             }
@@ -89,7 +90,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     override func viewDidAppear(_ animated: Bool) {
         self.cl = [String]()
         for i in inputList{
-            if i.isChecked{
+            if i.tag == tag{
                 cl.append(i.content)
             }
         }

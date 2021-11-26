@@ -120,7 +120,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         label.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
         label.center = CGPoint(x: self.view.center.x, y: 50)
         label.text = i
-        label.textColor = UIColor.black
+        label.textColor = UIColor.white
         self.view.addSubview(label)
         button.frame = CGRect(x: 0, y: 300, width: 300, height: 30)
         button.center = CGPoint(x: self.view.center.x, y: 150)
@@ -138,8 +138,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     @objc func btnSave(_ sender: Any){
         let inputContent = inputField.text
+        let inputTag = tagField.text
         let newInput = InputList()
         newInput.content = inputContent!
+        newInput.tag = inputTag!
         do{
             try realm.write({ () -> Void in
                             realm.add(newInput)
@@ -168,7 +170,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.inputLabel.text = inputList[indexPath.row].content
         cell.checkBtn.tag = indexPath.row
         cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
-        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
+//        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
+        cell.boolLabel.text = ""
         cell.deleteBtn.addTarget(self, action: #selector(deleteContent), for: .touchUpInside)
         cell.deleteBtn.tag = indexPath.row
         return cell
