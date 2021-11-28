@@ -16,8 +16,9 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     @IBOutlet weak var contentTableView: UITableView!
     @IBOutlet weak var contentTableViewCell: UITableViewCell!
     var ViewController: UIViewController!
-    let utterButton = UIButton()
-    let utterLabel = UILabel()
+    @IBOutlet weak var languagelabel: UILabel!
+    @IBOutlet weak var utterbutton: UIButton!
+    @IBOutlet weak var utterlabel: UILabel!
     var utterField = UITextField()
     private var cl = [String]()
     var token:NotificationToken!
@@ -32,6 +33,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.languagelabel.text = "ja-JP"
         self.contentTableView.register(UINib(nibName: "TagTableViewCell", bundle: nil), forCellReuseIdentifier: "TagTableViewCell")
         self.contentTableView.dataSource=self
         self.contentTableView.delegate=self
@@ -39,14 +41,13 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         // Do any additional setup after loading the view.
         self.cl = [String]()
         for i in inputList{
-            print(i)
             if i.tag == tag{
                 cl.append(i.content)
             }
         }
         self.contentTableView.reloadData()
         let hoge = cl.joined(separator: "、っ、")
-        self.initView(i: hoge)
+        initView(i: hoge)
         token = realm.observe{ notification, realm in
             //変更があった場合にtableViewを更新
             self.contentTableView.reloadData()
@@ -62,24 +63,21 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             super.viewDidLoad()
         }
     }
+    override func viewWillAppear(_ animated:Bool){
+        super.viewWillAppear(animated)
+        self.contentTableView.reloadData()
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+    }
     func initView(i:String){
-        utterLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 20)
-        utterLabel.center = CGPoint(x: self.view.center.x, y: 50)
-        utterLabel.text = i
-        utterLabel.textColor = UIColor.black
-        self.view.addSubview(utterLabel)
-        utterButton.frame = CGRect(x: 0, y: 300, width: 300, height: 30)
-        utterButton.center = CGPoint(x: self.view.center.x, y: 150)
-        utterButton.backgroundColor = UIColor.red
-        utterButton.titleLabel?.textColor = UIColor.white
-        utterButton.setTitle("input読み上げ", for: .normal)
-        utterButton.addTarget(self, action: #selector(speech), for: .touchUpInside)
-        self.view.addSubview(utterButton)
+        print("utterは")
+        print(utterlabel.text)
+        utterlabel.text = i
+        utterbutton.addTarget(self, action: #selector(speech), for: .touchUpInside)
     }
     @objc func speech(){
         let speechSynthesizer = AVSpeechSynthesizer()
-        let utterance = AVSpeechUtterance(string: self.utterLabel.text!)
-        let voice = AVSpeechSynthesisVoice(language: utterField.text)
+        let utterance = AVSpeechUtterance(string: self.utterlabel.text!)
+        let voice = AVSpeechSynthesisVoice(language: languagelabel.text)
         utterance.voice = voice
         speechSynthesizer.speak(utterance)
     }

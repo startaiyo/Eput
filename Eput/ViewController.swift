@@ -145,7 +145,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         do{
             try realm.write({ () -> Void in
                             realm.add(newInput)
-                            print("ToDo Saved")
             })
             self.InputTableView.reloadData()
         }catch{
@@ -236,96 +235,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             tagField.text = "\(taglist[pickerView2.selectedRow(inComponent: 0)])"
         }
     }
-    //viewDidLoad等で処理を行うと
-    //scrollViewの正しいサイズが取得出来ません
-//    override func viewDidLayoutSubviews() {
-//
-//        //viewDidLayoutSubviewsはviewDidLoadと違い
-//        //何度も呼ばれてしまうメソッドなので
-//        //一度だけメニュー作成を行うようにします
-////        if didPrepareMenu { return }
-////        didPrepareMenu = true
-//        makeTabBar()
-//    }
-//    func makeTabBar(){
-////        if didPrepareMenu {inputScrollView.removeFromSuperview()}
-////        didPrepareMenu = true
-//        //scrollViewのDelegateを指定
-//        inputScrollView.delegate = self
-//
-//        //タブのタイトル
-//        var titles = [String]()
-//
-//        for i in realm.objects(TagList.self) {
-//            titles.append(i.tag)
-//        }
-//
-//        //タブの縦幅(UIScrollViewと一緒にします)
-//        let tabLabelHeight:CGFloat = inputScrollView.frame.height
-//
-//        //右端にダミーのUILabelを置くこと
-//        //一番右のタブもセンターに持ってくることが出来ます
-//        let dummyLabelWidth = (inputScrollView.frame.size.width)/2 - tabLabelWidth/2
-//        let headDummyLabel = UILabel()
-//        headDummyLabel.frame = CGRect(x:0, y:0, width:dummyLabelWidth, height:tabLabelHeight)
-//        inputScrollView.addSubview(headDummyLabel)
-//
-//        //タブのx座標．
-//        //ダミーLabel分，はじめからずらしてあげましょう．
-//        var originX:CGFloat = dummyLabelWidth
-//        //titlesで定義したタブを1つずつ用意していく
-//        for title in titles {
-//            //タブになるUILabelを作る
-//            let label = UILabel()
-//            label.textAlignment = .center
-//            label.frame = CGRect(x:originX, y:0, width:tabLabelWidth, height:tabLabelHeight)
-//            label.text = title
-//
-//            //scrollViewにぺたっとする
-//            inputScrollView.addSubview(label)
-//
-//            //次のタブのx座標を用意する
-//            originX += tabLabelWidth
-//        print("tabbar")
-//        }
-//
-//        //左端にダミーのUILabelを置くことで
-//        //一番左のタブもセンターに持ってくることが出来ます
-//        let tailLabel = UILabel()
-//        tailLabel.frame = CGRect(x:originX, y:0, width:dummyLabelWidth, height:tabLabelHeight)
-//        inputScrollView.addSubview(tailLabel)
-//
-//        //ダミーLabel分を足して上げましょう
-//        originX += dummyLabelWidth
-//        inputScrollView.contentSize = CGSize(width:originX, height:tabLabelHeight)
-//    }
-
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        guard scrollView == self.inputScrollView else { return }
-//
-//        //微妙なスクロール位置でスクロールをやめた場合に
-//        //ちょうどいいタブをセンターに持ってくるためのアニメーションです
-//
-//        //現在のスクロールの位置(scrollView.contentOffset.x)から
-//        //どこのタブを表示させたいか計算します
-//        let index = Int((scrollView.contentOffset.x + tabLabelWidth/2) / tabLabelWidth)
-//        let x = index * 100
-//        UIView.animate(withDuration: 0.3, animations: {
-//            scrollView.contentOffset = CGPoint(x:x, y:0)
-//        })
-//    }
-
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        guard scrollView == self.inputScrollView else { return }
-//
-//        //これも上と同様に
-//
-//        let index = Int((scrollView.contentOffset.x + tabLabelWidth/2) / tabLabelWidth)
-//        let x = index * 100
-//        UIView.animate(withDuration: 1.0, animations: {
-//            scrollView.contentOffset = CGPoint(x:x, y:0)
-//        })
-//    }
     
     @IBAction func goNext(_ sender: Any) {
 //        inputScrollView.removeFromSuperview();

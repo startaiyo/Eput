@@ -65,7 +65,6 @@ class TagTableViewController: UIViewController, UITableViewDataSource, UITableVi
             alert.addTextField(
                 configurationHandler: {(textField: UITextField!) in
                     alertTextField = textField
-                    print(self.tags)
                     // textField.placeholder = "Mike"
                     // textField.isSecureTextEntry = true
             })
@@ -85,8 +84,6 @@ class TagTableViewController: UIViewController, UITableViewDataSource, UITableVi
                         do{
                             try self.realm.write({ () -> Void in
                                 self.realm.add(newTag)
-                                print(self.realm.objects(TagList.self))
-                                print("NewTag Saved")
                             })
                             self.TagTableView.reloadData()
                         }catch{
