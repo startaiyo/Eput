@@ -27,7 +27,7 @@ class RootViewController: UIViewController {
             super.init(coder: aDecoder)
         }
     override func viewDidLoad() {
-//        print("rootdidroad")
+
         self.tagList = realm.objects(TagList.self)
 //        var token = realm.observe{ notification, realm in
 //            self.tagList = realm.objects(TagList.self)
@@ -45,7 +45,6 @@ class RootViewController: UIViewController {
                     let controller:ContentsViewController = ContentsViewController(nibName: "ContentsViewController", bundle: nil)
             controller.title = info["tag"] as! String
             controller.tag = info["tag"] as! String
-            controller.utterField.text = "ja-JP"
 //            controller.content = site["url"]!
 
 //                    controller.webView = UIWebView(frame : self.view.bounds)
