@@ -34,7 +34,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         self.languagelabel.text = "ja-JP"
-        self.contentTableView.register(UINib(nibName: "TagTableViewCell", bundle: nil), forCellReuseIdentifier: "TagTableViewCell")
+        self.contentTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
         self.contentTableView.dataSource=self
         self.contentTableView.delegate=self
         self.inputList = realm.objects(InputList.self)
@@ -54,7 +54,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             self.inputList = realm.objects(InputList.self)
             self.cl = [String]()
             for i in self.inputList{
-                if i.tag == self.tag{
+                if (i.tag == self.tag) && (i.isChecked){
                     self.cl.append(i.content)
             }
             }
@@ -69,8 +69,6 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
     }
     func initView(i:String){
-        print("utterは")
-        print(utterlabel.text)
         utterlabel.text = i
         utterbutton.addTarget(self, action: #selector(speech), for: .touchUpInside)
     }
@@ -103,9 +101,9 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TagTableViewCell",for: indexPath) as! TagTableViewCell
-        cell.tagLabel.text = cl[indexPath.row]
-        cell.tagCheckBtn.tag = indexPath.row
+        let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
+        cell.inputLabel.text = cl[indexPath.row]
+        cell.checkBtn.tag = indexPath.row
         self.view.bringSubviewToFront(self.contentTableView)
 //        cell.tagCheckBtn.isChecked = inputList[indexPath.row].isChecked
         return cell

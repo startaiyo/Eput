@@ -285,6 +285,7 @@ class CheckBox: UIButton {
         }
         var target = inputList?[tag]
         try! realm.write{
+            print(self.isChecked)
             target?.isChecked = self.isChecked
             realm.add(target!, update:.modified)
         }
