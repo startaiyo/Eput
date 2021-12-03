@@ -37,11 +37,10 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         self.contentTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
         self.contentTableView.dataSource=self
         self.contentTableView.delegate=self
-        self.inputList = realm.objects(InputList.self)
+        self.inputList = realm.objects(InputList.self).filter("tag == %@ AND tag != ''", self.tag)
         // Do any additional setup after loading the view.
-        self.cl = [String]()
         for i in inputList{
-            if i.tag == tag{
+            if (i.tag == tag) && (i.isCheckedTag){
                 cl.append(i.content)
             }
         }
@@ -51,10 +50,11 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         token = realm.observe{ notification, realm in
             //変更があった場合にtableViewを更新
             self.contentTableView.reloadData()
-            self.inputList = realm.objects(InputList.self)
+            self.inputList = realm.objects(InputList.self).filter("tag == %@ AND tag != ''", self.tag)
+            print(self.inputList)
             self.cl = [String]()
             for i in self.inputList{
-                if (i.tag == self.tag) && (i.isChecked){
+                if (i.tag == self.tag) && (i.isCheckedTag){
                     self.cl.append(i.content)
             }
             }
@@ -84,7 +84,6 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             // Dispose of any resources that can be recreated.
         }
     override func viewDidAppear(_ animated: Bool) {
-        self.cl = [String]()
         for i in inputList{
             if i.tag == tag{
                 cl.append(i.content)
@@ -104,6 +103,8 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
         cell.inputLabel.text = cl[indexPath.row]
         cell.checkBtn.tag = indexPath.row
+        print(inputList)
+        cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
         self.view.bringSubviewToFront(self.contentTableView)
 //        cell.tagCheckBtn.isChecked = inputList[indexPath.row].isChecked
         return cell
