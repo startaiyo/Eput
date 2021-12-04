@@ -45,10 +45,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var rootCallBack: (() -> Void)?
     var pickersw = 0
     var didPrepareMenu = false
+    var vController = "vc"
 //    let tabLabelWidth:CGFloat = 100
     
     override func viewDidLoad() {
-        
         input = realm.objects(InputList.self).map({$0})
         self.InputTableView.delegate=self
         self.InputTableView.dataSource=self
@@ -169,6 +169,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.inputLabel.text = inputList[indexPath.row].content
         cell.checkBtn.tag = indexPath.row
         cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
+        cell.checkBtn.vc = self.vController
+        cell.checkBtn.t = ""
 //        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
         cell.boolLabel.text = ""
         cell.deleteBtn.addTarget(self, action: #selector(deleteContent), for: .touchUpInside)
@@ -258,8 +260,9 @@ class CheckBox: UIButton {
     let checkedImage = UIImage(named: "check_on")! as UIImage
     let uncheckedImage = UIImage(named: "check_off")! as UIImage
     let realm = try! Realm()
-    
+    var vc:String!
     var inputList:Results<InputList>?
+    var t:String!
     // Bool property
     var isChecked: Bool = false {
         didSet{
@@ -280,13 +283,15 @@ class CheckBox: UIButton {
 
 
     @objc func buttonClicked(sender: UIButton) {
+        print(inputList)
         if sender == self {
             isChecked = !isChecked
         }
         var target = inputList?[tag]
         try! realm.write{
-            print(self.isChecked)
-            target?.isChecked = self.isChecked
+            if self.vc == "vc"{
+                target?.isChecked = self.isChecked
+            }
             realm.add(target!, update:.modified)
         }
     }
