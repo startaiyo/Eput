@@ -23,6 +23,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     private var cl = [String]()
     var token:NotificationToken!
     var tag = ""
+    var vController = "cvc"
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
             super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         }
@@ -40,7 +41,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         self.inputList = realm.objects(InputList.self).filter("tag == %@ AND tag != ''", self.tag)
         // Do any additional setup after loading the view.
         for i in inputList{
-            if (i.tag == tag) && (i.isCheckedTag){
+            if i.isCheckedTag{
                 cl.append(i.content)
             }
         }
@@ -51,10 +52,9 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             //変更があった場合にtableViewを更新
             self.contentTableView.reloadData()
             self.inputList = realm.objects(InputList.self).filter("tag == %@ AND tag != ''", self.tag)
-            print(self.inputList)
             self.cl = [String]()
             for i in self.inputList{
-                if (i.tag == self.tag) && (i.isCheckedTag){
+                if i.isCheckedTag{
                     self.cl.append(i.content)
             }
             }
@@ -96,15 +96,16 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             return true
         }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.cl.count
+        return self.inputList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
-        cell.inputLabel.text = cl[indexPath.row]
+        cell.inputLabel.text = inputList[indexPath.row].content
         cell.checkBtn.tag = indexPath.row
-        print(inputList)
-        cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
+        cell.checkBtn.isChecked = inputList[indexPath.row].isCheckedTag
+        cell.checkBtn.inputList = inputList
+        cell.checkBtn.vc = self.vController
         self.view.bringSubviewToFront(self.contentTableView)
 //        cell.tagCheckBtn.isChecked = inputList[indexPath.row].isChecked
         return cell
@@ -127,3 +128,46 @@ class CustomCell: UITableViewCell {
         print(indexPath.row)
     }
 }
+//class CheckBoxTag: UIButton {
+//    // Images
+//    let checkedImage = UIImage(named: "check_on")! as UIImage
+//    let uncheckedImage = UIImage(named: "check_off")! as UIImage
+//    let realm = try! Realm()
+//    var vc:String!
+//    var inputList:Results<InputList>?
+//    var t:String!
+//    // Bool property
+//    var isChecked: Bool = false {
+//        didSet{
+//            if isChecked == true {
+//                self.setImage(checkedImage, for: UIControl.State.normal)
+//            } else {
+//                self.setImage(uncheckedImage, for: UIControl.State.normal)
+//            }
+//        }
+//    }
+//
+//    override func awakeFromNib() {
+//        self.addTarget(self, action:#selector(buttonClicked(sender:)), for: UIControl.Event.touchUpInside)
+//        self.isChecked = false
+//        self.inputList = realm.objects(InputList.self)
+//    }
+//
+//
+//
+//    @objc func buttonClicked(sender: UIButton) {
+//        print(inputList)
+//        if sender == self {
+//            isChecked = !isChecked
+//        }
+//        var target = inputList?[tag]
+//        try! realm.write{
+//            if self.vc == "vc"{
+//                target?.isChecked = self.isChecked
+//            }else if self.vc == "cvc"{
+//                target?.isCheckedTag = self.isChecked
+//            }
+//            realm.add(target!, update:.modified)
+//        }
+//    }
+//}
