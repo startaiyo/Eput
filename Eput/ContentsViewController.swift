@@ -85,7 +85,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         }
     override func viewDidAppear(_ animated: Bool) {
         for i in inputList{
-            if i.tag == tag{
+            if i.isCheckedTag{
                 cl.append(i.content)
             }
         }
