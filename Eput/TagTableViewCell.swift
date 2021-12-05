@@ -8,7 +8,7 @@
 import UIKit
 
 class TagTableViewCell: UITableViewCell {
-
+    
     @IBOutlet weak var tagLabel: UILabel!
 //    @IBOutlet weak var tagCheckBtn: CheckBoxTag!
     override func awakeFromNib() {

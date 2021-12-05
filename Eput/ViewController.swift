@@ -291,6 +291,8 @@ class CheckBox: UIButton {
         try! realm.write{
             if self.vc == "vc"{
                 target?.isChecked = self.isChecked
+            }else if self.vc == "cvc"{
+                target?.isCheckedTag = self.isChecked
             }
             realm.add(target!, update:.modified)
         }
