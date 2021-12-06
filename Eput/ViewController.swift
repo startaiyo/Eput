@@ -129,12 +129,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         button.setTitle("input読み上げ", for: .normal)
         button.addTarget(self, action: #selector(ViewController.speech), for: .touchUpInside)
         self.view.addSubview(button)
-//        inputbutton.frame = CGRect(x: 110, y: 100, width: 300, height: 30)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
         deletetagbutton.addTarget(self, action: #selector(goNext), for: .touchUpInside)
         valid(inputField)
         inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
-//        languageField.frame = CGRect(x: self.view.center.x-50, y: 40, width: 100, height: 30)
     }
     @objc func btnSave(_ sender: Any){
         let inputContent = inputField.text
@@ -239,8 +237,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @IBAction func goNext(_ sender: Any) {
-//        inputScrollView.removeFromSuperview();
-     
             // ①storyboardのインスタンス取得
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
      
@@ -251,7 +247,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.present(nextView, animated: true, completion: nil)
         }
     func callBack(){
-//        makeTabBar()
         self.rootCallBack?()
     }
 }
@@ -283,7 +278,6 @@ class CheckBox: UIButton {
 
 
     @objc func buttonClicked(sender: UIButton) {
-        print(inputList)
         if sender == self {
             isChecked = !isChecked
         }
