@@ -1,6 +1,7 @@
 import UIKit
 import AVFoundation
 import RealmSwift
+import SwiftReorder
 
 class InputList: Object{
     @objc dynamic var id : String = UUID().uuidString
@@ -196,13 +197,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.initView(i: hoge)
     }
     
-    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-            return true
-        }
+//    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+//            return true
+//        }
+//
+//    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//            // TODO: 入れ替え時の処理を実装する（データ制御など）
+//        }
+//
+//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+//            return .none
+//        }
 
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-            // TODO: 入れ替え時の処理を実装する（データ制御など）
-        }
+//    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+//            return false
+//        }
 
     @IBAction func deleteContent(_ sender: UIButton){
         let indexPath = IndexPath(row: sender.tag, section:0)
