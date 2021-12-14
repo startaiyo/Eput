@@ -19,6 +19,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     @IBOutlet weak var languagelabel: UILabel!
     @IBOutlet weak var utterbutton: UIButton!
     @IBOutlet weak var utterlabel: UILabel!
+    @IBOutlet weak var contentLanguageField: UITextField!
     var utterField = UITextField()
     private var cl = [String]()
     var token:NotificationToken!
