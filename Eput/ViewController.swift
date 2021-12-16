@@ -10,6 +10,7 @@ class InputList: Object{
     @objc dynamic var isChecked : Bool = false
     @objc dynamic var tag : String = ""
     @objc dynamic var isCheckedTag : Bool = false
+//    @objc dynamic var order = 0
     override static func primaryKey() -> String? {
         return "id"
     }
@@ -51,6 +52,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         input = realm.objects(InputList.self).map({$0})
+//        self.InputTableView.reorder.delegate=self
         self.InputTableView.delegate=self
         self.InputTableView.dataSource=self
         self.InputTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
@@ -196,6 +198,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let hoge = self.il.joined(separator: "、っ、")
         self.initView(i: hoge)
     }
+//    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
+//        try! realm.write {
+//            let sourceObject = self.inputList[sourceIndexPath.row]
+//            let destinationObject = self.inputList[destinationIndexPath.row]
+//
+//            let destinationObjectOrder = destinationObject.order
+//
+//            if sourceIndexPath.row < destinationIndexPath.row {
+//                // 上から下に移動した場合、間の項目を上にシフト
+//                for index in sourceIndexPath.row...destinationIndexPath.row {
+//                    let object = self.inputList[index]
+//                    object.order -= 1
+//                }
+//            } else {
+//                // 下から上に移動した場合、間の項目を下にシフト
+//                for index in (destinationIndexPath.row..<sourceIndexPath.row).reverse() {
+//                    let object = self.inputList[index]
+//                    object.order += 1
+//                }
+//            }
+//
+//            // 移動したセルの並びを移動先に更新
+//            sourceObject.order = destinationObjectOrder
+//        }
+//    }
     
 //    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
 //            return true
@@ -337,3 +364,13 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
        }
    }
 }
+//extension ViewController: TableViewReorderDelegate {
+//    func tableView(_ tableView: UITableView, reorderRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        // Update data model
+//        try! realm.write {
+//            let listItem = self.inputList[sourceIndexPath.row]
+//            self.inputList.remove(at: sourceIndexPath.row)
+//            self.inputList.insert(listItem, at: destinationIndexPath.row)
+//        }
+//    }
+//}
