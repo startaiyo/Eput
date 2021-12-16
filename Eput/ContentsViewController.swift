@@ -10,6 +10,7 @@ import RealmSwift
 import AVFoundation
 
 class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate{
+    
     let realm = try! Realm()
     var inputList:Results<InputList>!
     private var input = [InputList]()
@@ -20,7 +21,9 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     @IBOutlet weak var utterbutton: UIButton!
     @IBOutlet weak var utterlabel: UILabel!
     @IBOutlet weak var contentLanguageField: UITextField!
+    let utterLanglist: [String] = ["ja-JP","en-US"]
     var utterField = UITextField()
+    var utterPickerView = UIPickerView()
     private var cl = [String]()
     var token:NotificationToken!
     var tag = ""
@@ -41,6 +44,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         self.contentTableView.delegate=self
         self.inputList = realm.objects(InputList.self).filter("tag == %@ AND tag != ''", self.tag)
         // Do any additional setup after loading the view.
+        cl = []
         for i in inputList{
             if i.isCheckedTag{
                 cl.append(i.content)
@@ -63,6 +67,16 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             self.initView(i: hoge)
             super.viewDidLoad()
         }
+        utterPickerView.delegate = self
+        utterPickerView.dataSource = self
+        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 35))
+        let spacelItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+        let doneItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
+        toolbar.setItems([spacelItem, doneItem], animated: true)
+        contentLanguageField.inputView = utterPickerView
+        contentLanguageField.inputAccessoryView = toolbar
+        utterPickerView.selectRow(0, inComponent: 0, animated:false)
+        contentLanguageField.text = "ja-JP"
     }
     override func viewWillAppear(_ animated:Bool){
         super.viewWillAppear(animated)
@@ -76,7 +90,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     @objc func speech(){
         let speechSynthesizer = AVSpeechSynthesizer()
         let utterance = AVSpeechUtterance(string: self.utterlabel.text!)
-        let voice = AVSpeechSynthesisVoice(language: languagelabel.text)
+        let voice = AVSpeechSynthesisVoice(language: contentLanguageField.text)
         utterance.voice = voice
         speechSynthesizer.speak(utterance)
     }
@@ -85,6 +99,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
             // Dispose of any resources that can be recreated.
         }
     override func viewDidAppear(_ animated: Bool) {
+        cl = []
         for i in inputList{
             if i.isCheckedTag{
                 cl.append(i.content)
@@ -111,6 +126,10 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
 //        cell.tagCheckBtn.isChecked = inputList[indexPath.row].isChecked
         return cell
     }
+    @objc func done() {
+        contentLanguageField.endEditing(true)
+        contentLanguageField.text = "\(utterLanglist[utterPickerView.selectedRow(inComponent: 0)])"
+    }
     /*
     // MARK: - Navigation
 
@@ -128,6 +147,23 @@ class CustomCell: UITableViewCell {
     @IBAction func pushCellButton(_ sender: UIButton) {
         print(indexPath.row)
     }
+}
+extension ContentsViewController : UIPickerViewDelegate, UIPickerViewDataSource {
+
+   // ドラムロールの列数
+   func numberOfComponents(in pickerView: UIPickerView) -> Int {
+       return 1
+   }
+   
+   // ドラムロールの行数
+   func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+       return utterLanglist.count
+   }
+   
+   // ドラムロールの各タイトル
+   func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return utterLanglist[row]
+   }
 }
 //class CheckBoxTag: UIButton {
 //    // Images
