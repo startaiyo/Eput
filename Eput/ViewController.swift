@@ -173,7 +173,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.checkBtn.vc = self.vController
         cell.checkBtn.t = ""
 //        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
-        cell.boolLabel.text = ""
         cell.deleteBtn.addTarget(self, action: #selector(deleteContent), for: .touchUpInside)
         cell.deleteBtn.tag = indexPath.row
         return cell
