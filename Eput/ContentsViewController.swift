@@ -17,9 +17,8 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     @IBOutlet weak var contentTableView: UITableView!
     @IBOutlet weak var contentTableViewCell: UITableViewCell!
     var ViewController: UIViewController!
-    @IBOutlet weak var languagelabel: UILabel!
+    @IBOutlet weak var utterLabel: UILabel!
     @IBOutlet weak var utterbutton: UIButton!
-    @IBOutlet weak var utterlabel: UILabel!
     @IBOutlet weak var contentLanguageField: UITextField!
     let utterLanglist: [String] = ["ja-JP","en-US"]
     var utterField = UITextField()
@@ -38,7 +37,6 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.languagelabel.text = "ja-JP"
         self.contentTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
         self.contentTableView.dataSource=self
         self.contentTableView.delegate=self
@@ -84,12 +82,12 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
     }
     func initView(i:String){
-        utterlabel.text = i
+        utterLabel.text = i
         utterbutton.addTarget(self, action: #selector(speech), for: .touchUpInside)
     }
     @objc func speech(){
         let speechSynthesizer = AVSpeechSynthesizer()
-        let utterance = AVSpeechUtterance(string: self.utterlabel.text!)
+        let utterance = AVSpeechUtterance(string: self.utterLabel.text!)
         let voice = AVSpeechSynthesisVoice(language: contentLanguageField.text)
         utterance.voice = voice
         speechSynthesizer.speak(utterance)
