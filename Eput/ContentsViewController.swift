@@ -83,6 +83,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     }
     func initView(i:String){
         utterLabel.text = i
+        utterLabel.textColor = UIColor.white
         utterbutton.addTarget(self, action: #selector(speech), for: .touchUpInside)
     }
     @objc func speech(){
