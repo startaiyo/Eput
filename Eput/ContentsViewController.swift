@@ -164,46 +164,4 @@ extension ContentsViewController : UIPickerViewDelegate, UIPickerViewDataSource 
         return utterLanglist[row]
    }
 }
-//class CheckBoxTag: UIButton {
-//    // Images
-//    let checkedImage = UIImage(named: "check_on")! as UIImage
-//    let uncheckedImage = UIImage(named: "check_off")! as UIImage
-//    let realm = try! Realm()
-//    var vc:String!
-//    var inputList:Results<InputList>?
-//    var t:String!
-//    // Bool property
-//    var isChecked: Bool = false {
-//        didSet{
-//            if isChecked == true {
-//                self.setImage(checkedImage, for: UIControl.State.normal)
-//            } else {
-//                self.setImage(uncheckedImage, for: UIControl.State.normal)
-//            }
-//        }
-//    }
-//
-//    override func awakeFromNib() {
-//        self.addTarget(self, action:#selector(buttonClicked(sender:)), for: UIControl.Event.touchUpInside)
-//        self.isChecked = false
-//        self.inputList = realm.objects(InputList.self)
-//    }
-//
-//
-//
-//    @objc func buttonClicked(sender: UIButton) {
-//        print(inputList)
-//        if sender == self {
-//            isChecked = !isChecked
-//        }
-//        var target = inputList?[tag]
-//        try! realm.write{
-//            if self.vc == "vc"{
-//                target?.isChecked = self.isChecked
-//            }else if self.vc == "cvc"{
-//                target?.isCheckedTag = self.isChecked
-//            }
-//            realm.add(target!, update:.modified)
-//        }
-//    }
-//}
+

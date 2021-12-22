@@ -197,47 +197,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let hoge = self.il.joined(separator: "、っ、")
         self.initView(i: hoge)
     }
-//    func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
-//        try! realm.write {
-//            let sourceObject = self.inputList[sourceIndexPath.row]
-//            let destinationObject = self.inputList[destinationIndexPath.row]
-//
-//            let destinationObjectOrder = destinationObject.order
-//
-//            if sourceIndexPath.row < destinationIndexPath.row {
-//                // 上から下に移動した場合、間の項目を上にシフト
-//                for index in sourceIndexPath.row...destinationIndexPath.row {
-//                    let object = self.inputList[index]
-//                    object.order -= 1
-//                }
-//            } else {
-//                // 下から上に移動した場合、間の項目を下にシフト
-//                for index in (destinationIndexPath.row..<sourceIndexPath.row).reverse() {
-//                    let object = self.inputList[index]
-//                    object.order += 1
-//                }
-//            }
-//
-//            // 移動したセルの並びを移動先に更新
-//            sourceObject.order = destinationObjectOrder
-//        }
-//    }
-    
-//    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-//            return true
-//        }
-//
-//    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//            // TODO: 入れ替え時の処理を実装する（データ制御など）
-//        }
-//
-//    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-//            return .none
-//        }
-
-//    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-//            return false
-//        }
 
     @IBAction func deleteContent(_ sender: UIButton){
         let indexPath = IndexPath(row: sender.tag, section:0)
@@ -363,13 +322,3 @@ extension ViewController : UIPickerViewDelegate, UIPickerViewDataSource {
        }
    }
 }
-//extension ViewController: TableViewReorderDelegate {
-//    func tableView(_ tableView: UITableView, reorderRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        // Update data model
-//        try! realm.write {
-//            let listItem = self.inputList[sourceIndexPath.row]
-//            self.inputList.remove(at: sourceIndexPath.row)
-//            self.inputList.insert(listItem, at: destinationIndexPath.row)
-//        }
-//    }
-//}
