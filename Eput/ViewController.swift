@@ -15,6 +15,9 @@ class InputList: Object{
         return "id"
     }
 }
+class ItemList: Object{
+    let list = List<InputList>()
+}
 class TagList: Object{
     @objc dynamic var id : String = UUID().uuidString
     @objc dynamic var tag : String = ""
