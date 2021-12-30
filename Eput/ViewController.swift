@@ -51,6 +51,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var pickersw = 0
     var didPrepareMenu = false
     var vController = "vc"
+    var list: List<InputList>!
 //    let tabLabelWidth:CGFloat = 100
     
     override func viewDidLoad() {
@@ -91,6 +92,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.initView(i: hoge)
             super.viewDidLoad()
         }
+        list = realm.objects(ItemList.self).first?.list
         // ピッカー設定
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -170,7 +172,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
-        cell.inputLabel.text = inputList[indexPath.row].content
+        cell.inputLabel.text = inputList?[indexPath.row].content
         cell.checkBtn.tag = indexPath.row
         cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
         cell.checkBtn.vc = self.vController
