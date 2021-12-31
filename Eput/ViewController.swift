@@ -52,7 +52,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var didPrepareMenu = false
     var vController = "vc"
     var list: List<InputList>!
-//    let tabLabelWidth:CGFloat = 100
+    @IBOutlet weak var editButton: UIButton!
+    //    let tabLabelWidth:CGFloat = 100
     
     override func viewDidLoad() {
         input = realm.objects(InputList.self).map({$0})
@@ -114,6 +115,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         pickerView.selectRow(0, inComponent: 0, animated: false)
         pickerView2.selectRow(0, inComponent: 0, animated: false)
         languageField.text = "ja-JP"
+        self.InputTableView.isEditing = true
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
@@ -149,9 +151,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         newInput.content = inputContent!
         newInput.tag = inputTag!
         do{
-            try realm.write({ () -> Void in
-                            realm.add(newInput)
-            })
+            try realm.write(){
+                if self.list == nil{
+                    let itemList = ItemList()
+                    itemList.list.append(newInput)
+                    self.realm.add(itemList)
+                    self.list = self.realm.objects(ItemList.self).first?.list
+                }else{
+                    self.list.append(newInput)
+                }
+                realm.add(newInput)
+            }
             self.InputTableView.reloadData()
         }catch{
             print("Saving Is Failed")
@@ -164,6 +174,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         self.inputbutton.isEnabled = true
     }
+//    @IBAction func editTapped(_ sender: Any) {
+//        if(tableView.isEditing){
+//            tableView.setEditing(false, animated: true)
+//            editButton.setTitle("Edit", for: .normal)
+//        } else {
+//            tableView.setEditing(true, animated: true)
+//            editButton.setTitle("Done", for: .normal)
+//        }
+//    }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
             return true
         }
@@ -172,7 +191,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
-        cell.inputLabel.text = inputList?[indexPath.row].content
+        cell.inputLabel.text = list[indexPath.row].content
         cell.checkBtn.tag = indexPath.row
         cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
         cell.checkBtn.vc = self.vController
@@ -180,9 +199,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 //        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
         cell.deleteBtn.addTarget(self, action: #selector(deleteContent), for: .touchUpInside)
         cell.deleteBtn.tag = indexPath.row
+        print(list)
         return cell
     }
-    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             // Realmのデータ削除
             try! realm.write(withoutNotifying:[token]) {
@@ -202,11 +221,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let hoge = self.il.joined(separator: "、っ、")
         self.initView(i: hoge)
     }
-
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+            return true
+        }
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+            try! realm.write {
+                let listItem = list[fromIndexPath.row]
+                list.remove(at: fromIndexPath.row)
+                list.insert(listItem, at: to.row)
+            }
+        }
     @IBAction func deleteContent(_ sender: UIButton){
         let indexPath = IndexPath(row: sender.tag, section:0)
         try! realm.write(withoutNotifying:[token]) {
-            realm.delete(inputList[indexPath.row])
+            let item = list[indexPath.row]
+            realm.delete(item)
         }
         // テーブルのデータ削除
         self.InputTableView.deleteRows(at: [indexPath], with: .automatic)
