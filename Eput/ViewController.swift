@@ -51,7 +51,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var pickersw = 0
     var didPrepareMenu = false
     var vController = "vc"
-//    let tabLabelWidth:CGFloat = 100
+    var list: List<InputList>!
+    @IBOutlet weak var editButton: UIButton!
+    //    let tabLabelWidth:CGFloat = 100
     
     override func viewDidLoad() {
         input = realm.objects(InputList.self).map({$0})
@@ -60,7 +62,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.InputTableView.dataSource=self
         self.InputTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
         self.inputList = realm.objects(InputList.self)
-        for i in inputList{
+        self.list = realm.objects(ItemList.self).first?.list
+        for i in list{
             if i.isChecked{
             il.append(i.content)
         }
@@ -76,8 +79,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //変更があった場合にtableViewを更新
             self.InputTableView.reloadData()
             self.inputList = realm.objects(InputList.self)
+            self.list = realm.objects(ItemList.self).first?.list
+            self.taglist = []
             self.il = [""]
-            for i in self.inputList{
+            for i in self.list{
                 if i.isChecked{
                     self.il.append(i.content)
             }
@@ -91,6 +96,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.initView(i: hoge)
             super.viewDidLoad()
         }
+        
         // ピッカー設定
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -137,6 +143,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(button)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
         deletetagbutton.addTarget(self, action: #selector(goNext), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
         valid(inputField)
         inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
     }
@@ -147,9 +154,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         newInput.content = inputContent!
         newInput.tag = inputTag!
         do{
-            try realm.write({ () -> Void in
-                            realm.add(newInput)
-            })
+            try realm.write(){
+                if self.list == nil{
+                    let itemList = ItemList()
+                    itemList.list.append(newInput)
+                    self.realm.add(itemList)
+                    self.list = self.realm.objects(ItemList.self).first?.list
+                }else{
+                    self.list.append(newInput)
+                }
+                realm.add(newInput)
+            }
             self.InputTableView.reloadData()
         }catch{
             print("Saving Is Failed")
@@ -162,6 +177,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         self.inputbutton.isEnabled = true
     }
+    @IBAction func editTapped(_ sender: Any) {
+        if(self.InputTableView.isEditing){
+            self.InputTableView.setEditing(false, animated: true)
+            editButton.setTitle("Edit", for: .normal)
+        } else {
+            self.InputTableView.setEditing(true, animated: true)
+            editButton.setTitle("Done", for: .normal)
+        }
+    }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
             return true
         }
@@ -170,9 +194,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
         let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
-        cell.inputLabel.text = inputList[indexPath.row].content
+        cell.inputLabel.text = list[indexPath.row].content
         cell.checkBtn.tag = indexPath.row
-        cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
+        cell.checkBtn.isChecked = list[indexPath.row].isChecked
         cell.checkBtn.vc = self.vController
         cell.checkBtn.t = ""
 //        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
@@ -180,7 +204,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.deleteBtn.tag = indexPath.row
         return cell
     }
-    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             // Realmのデータ削除
             try! realm.write(withoutNotifying:[token]) {
@@ -200,11 +223,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let hoge = self.il.joined(separator: "、っ、")
         self.initView(i: hoge)
     }
-
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+            return true
+        }
+    func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+            try! realm.write {
+                let listItem = list[fromIndexPath.row]
+                list.remove(at: fromIndexPath.row)
+                list.insert(listItem, at: to.row)
+            }
+        }
     @IBAction func deleteContent(_ sender: UIButton){
         let indexPath = IndexPath(row: sender.tag, section:0)
         try! realm.write(withoutNotifying:[token]) {
-            realm.delete(inputList[indexPath.row])
+            let item = list[indexPath.row]
+            realm.delete(item)
         }
         // テーブルのデータ削除
         self.InputTableView.deleteRows(at: [indexPath], with: .automatic)
@@ -262,6 +295,7 @@ class CheckBox: UIButton {
     let realm = try! Realm()
     var vc:String!
     var inputList:Results<InputList>?
+    var list: List<InputList>!
     var t:String!
     // Bool property
     var isChecked: Bool = false {
@@ -278,6 +312,7 @@ class CheckBox: UIButton {
         self.addTarget(self, action:#selector(buttonClicked(sender:)), for: UIControl.Event.touchUpInside)
         self.isChecked = false
         self.inputList = realm.objects(InputList.self)
+        self.list = realm.objects(ItemList.self).first?.list
     }
 
 
@@ -286,7 +321,11 @@ class CheckBox: UIButton {
         if sender == self {
             isChecked = !isChecked
         }
-        var target = inputList?[tag]
+        var target = list?[tag]
+        if self.vc == "cvc"{
+            target = inputList?[tag]
+        }
+        print(target)
         try! realm.write{
             if self.vc == "vc"{
                 target?.isChecked = self.isChecked
