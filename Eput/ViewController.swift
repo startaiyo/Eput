@@ -62,7 +62,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.InputTableView.dataSource=self
         self.InputTableView.register(UINib(nibName: "InputTableViewCell", bundle: nil), forCellReuseIdentifier: "InputTableViewCell")
         self.inputList = realm.objects(InputList.self)
-        for i in inputList{
+        self.list = realm.objects(ItemList.self).first?.list
+        for i in list{
             if i.isChecked{
             il.append(i.content)
         }
@@ -78,8 +79,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             //変更があった場合にtableViewを更新
             self.InputTableView.reloadData()
             self.inputList = realm.objects(InputList.self)
+            self.list = realm.objects(ItemList.self).first?.list
+            self.taglist = []
             self.il = [""]
-            for i in self.inputList{
+            for i in self.list{
                 if i.isChecked{
                     self.il.append(i.content)
             }
@@ -93,7 +96,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.initView(i: hoge)
             super.viewDidLoad()
         }
-        list = realm.objects(ItemList.self).first?.list
+        
         // ピッカー設定
         pickerView.delegate = self
         pickerView.dataSource = self
@@ -115,7 +118,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         pickerView.selectRow(0, inComponent: 0, animated: false)
         pickerView2.selectRow(0, inComponent: 0, animated: false)
         languageField.text = "ja-JP"
-        self.InputTableView.isEditing = true
     }
     @IBOutlet weak var moveInput: UIButton!
     override func viewWillAppear(_ animated:Bool){
@@ -141,6 +143,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.view.addSubview(button)
         inputbutton.addTarget(self, action: #selector(btnSave), for: .touchUpInside)
         deletetagbutton.addTarget(self, action: #selector(goNext), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(editTapped), for: .touchUpInside)
         valid(inputField)
         inputField.addTarget(self, action: #selector(self.valid(_:)), for: UIControl.Event.editingChanged)
     }
@@ -174,15 +177,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
         self.inputbutton.isEnabled = true
     }
-//    @IBAction func editTapped(_ sender: Any) {
-//        if(tableView.isEditing){
-//            tableView.setEditing(false, animated: true)
-//            editButton.setTitle("Edit", for: .normal)
-//        } else {
-//            tableView.setEditing(true, animated: true)
-//            editButton.setTitle("Done", for: .normal)
-//        }
-//    }
+    @IBAction func editTapped(_ sender: Any) {
+        if(self.InputTableView.isEditing){
+            self.InputTableView.setEditing(false, animated: true)
+            editButton.setTitle("Edit", for: .normal)
+        } else {
+            self.InputTableView.setEditing(true, animated: true)
+            editButton.setTitle("Done", for: .normal)
+        }
+    }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
             return true
         }
@@ -193,13 +196,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "InputTableViewCell",for: indexPath) as! InputTableViewCell
         cell.inputLabel.text = list[indexPath.row].content
         cell.checkBtn.tag = indexPath.row
-        cell.checkBtn.isChecked = inputList[indexPath.row].isChecked
+        cell.checkBtn.isChecked = list[indexPath.row].isChecked
         cell.checkBtn.vc = self.vController
         cell.checkBtn.t = ""
 //        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
         cell.deleteBtn.addTarget(self, action: #selector(deleteContent), for: .touchUpInside)
         cell.deleteBtn.tag = indexPath.row
-        print(list)
         return cell
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -293,6 +295,7 @@ class CheckBox: UIButton {
     let realm = try! Realm()
     var vc:String!
     var inputList:Results<InputList>?
+    var list: List<InputList>!
     var t:String!
     // Bool property
     var isChecked: Bool = false {
@@ -309,6 +312,7 @@ class CheckBox: UIButton {
         self.addTarget(self, action:#selector(buttonClicked(sender:)), for: UIControl.Event.touchUpInside)
         self.isChecked = false
         self.inputList = realm.objects(InputList.self)
+        self.list = realm.objects(ItemList.self).first?.list
     }
 
 
@@ -317,7 +321,11 @@ class CheckBox: UIButton {
         if sender == self {
             isChecked = !isChecked
         }
-        var target = inputList?[tag]
+        var target = list?[tag]
+        if self.vc == "cvc"{
+            target = inputList?[tag]
+        }
+        print(target)
         try! realm.write{
             if self.vc == "vc"{
                 target?.isChecked = self.isChecked

@@ -27,6 +27,8 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
     var token:NotificationToken!
     var tag = ""
     var vController = "cvc"
+    var list: List<InputList>!
+    let list2 = ItemList()
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
             super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         }
@@ -41,6 +43,10 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         self.contentTableView.dataSource=self
         self.contentTableView.delegate=self
         self.inputList = realm.objects(InputList.self).filter("tag == %@ AND tag != ''", self.tag)
+//        self.list = realm.objects(ItemList.self).first?.list
+//        self.list2.list.append(objectsIn: inputList)
+//        print(self.list)
+//        print(self.list2)
         // Do any additional setup after loading the view.
         cl = []
         for i in inputList{
@@ -54,7 +60,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         token = realm.observe{ notification, realm in
             //変更があった場合にtableViewを更新
             self.contentTableView.reloadData()
-            self.inputList = realm.objects(InputList.self).filter("tag == %@ AND tag != ''", self.tag)
+            self.list = realm.objects(ItemList.self).first?.list
             self.cl = [String]()
             for i in self.inputList{
                 if i.isCheckedTag{
