@@ -93,10 +93,10 @@
                                 <buttonConfiguration key="configuration" style="plain" title="タグ追加・削除"/>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pDc-mH-A2N">
-                                <rect key="frame" x="294" y="277" width="49" height="31"/>
+                                <rect key="frame" x="267" y="277" width="110" height="31"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="edit"/>
+                                <buttonConfiguration key="configuration" style="plain" title="並べ替え"/>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
