@@ -207,14 +207,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
             // Realmのデータ削除
             try! realm.write(withoutNotifying:[token]) {
-                realm.delete(inputList[indexPath.row])
+                realm.delete(list[indexPath.row])
             }
             // テーブルのデータ削除
             self.InputTableView.deleteRows(at: [indexPath], with: .automatic)
         self.perform(#selector(reloadTable), with: nil, afterDelay: 0.1)
-        self.inputList = realm.objects(InputList.self)
+        self.list = realm.objects(ItemList.self).first?.list
         self.il = [""]
-        for i in self.inputList{
+        for i in self.list{
             if i.isChecked{
                 self.il.append(i.content)
         }
