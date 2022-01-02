@@ -11,7 +11,7 @@ class InputTableViewCell: UITableViewCell {
     @IBOutlet weak var inputLabel: UILabel!
     @IBOutlet weak var checkBtn: CheckBox!
     @IBOutlet weak var boolLabel: UILabel!
-    @IBOutlet weak var deleteBtn: UIButton!
+//    @IBOutlet weak var deleteBtn: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
