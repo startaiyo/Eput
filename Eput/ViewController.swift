@@ -200,8 +200,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.checkBtn.vc = self.vController
         cell.checkBtn.t = ""
 //        cell.boolLabel.text = String(inputList[indexPath.row].isChecked)
-        cell.deleteBtn.addTarget(self, action: #selector(deleteContent), for: .touchUpInside)
-        cell.deleteBtn.tag = indexPath.row
+//        cell.deleteBtn.addTarget(self, action: #selector(deleteContent), for: .touchUpInside)
+//        cell.deleteBtn.tag = indexPath.row
         return cell
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -233,26 +233,33 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 list.insert(listItem, at: to.row)
             }
         }
-    @IBAction func deleteContent(_ sender: UIButton){
-        let indexPath = IndexPath(row: sender.tag, section:0)
-        try! realm.write(withoutNotifying:[token]) {
-            let item = list[indexPath.row]
-            realm.delete(item)
+    func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell.EditingStyle {
+        if InputTableView.isEditing {
+            return UITableViewCell.EditingStyle.delete
+        } else {
+            return UITableViewCell.EditingStyle.none
         }
-        // テーブルのデータ削除
-        self.InputTableView.deleteRows(at: [indexPath], with: .automatic)
-    self.perform(#selector(reloadTable), with: nil, afterDelay: 0.1)
-    self.inputList = realm.objects(InputList.self)
-    self.il = [""]
-    for i in self.inputList{
-        if i.isChecked{
-            self.il.append(i.content)
     }
-    }
-    self.il.removeFirst()
-    let hoge = self.il.joined(separator: "、っ、")
-    self.initView(i: hoge)
-    }
+//    @IBAction func deleteContent(_ sender: UIButton){
+//        let indexPath = IndexPath(row: sender.tag, section:0)
+//        try! realm.write(withoutNotifying:[token]) {
+//            let item = list[indexPath.row]
+//            realm.delete(item)
+//        }
+//        // テーブルのデータ削除
+//        self.InputTableView.deleteRows(at: [indexPath], with: .automatic)
+//    self.perform(#selector(reloadTable), with: nil, afterDelay: 0.1)
+//    self.inputList = realm.objects(InputList.self)
+//    self.il = [""]
+//    for i in self.inputList{
+//        if i.isChecked{
+//            self.il.append(i.content)
+//    }
+//    }
+//    self.il.removeFirst()
+//    let hoge = self.il.joined(separator: "、っ、")
+//    self.initView(i: hoge)
+//    }
     @objc func reloadTable() {
         self.InputTableView.reloadData()
     }
