@@ -81,6 +81,7 @@ class ContentsViewController: UIViewController,UITableViewDelegate, UITableViewD
         contentLanguageField.inputAccessoryView = toolbar
         utterPickerView.selectRow(0, inComponent: 0, animated:false)
         contentLanguageField.text = "ja-JP"
+        utterLabel.textColor = UIColor.green
     }
     override func viewWillAppear(_ animated:Bool){
         super.viewWillAppear(animated)
